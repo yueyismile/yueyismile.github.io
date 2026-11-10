@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OC档案馆 | 月翼smile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #040405;
+            --bg-card: rgba(8, 8, 10, 0.95);
+            --text-main: #e8e8eb;
+            --text-muted: #8a8a93;
+            --accent-gold: #c9a063;
+            --accent-crimson: #8b0000;
+            --accent-blood: #cc0000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 25 C60 35, 70 45, 50 65 C30 45, 40 35, 50 25 Z M50 65 C60 75, 70 85, 50 95 C30 85, 40 75, 50 65 Z M25 50 C35 60, 45 70, 50 65 C40 55, 35 45, 25 50 Z M75 50 C65 60, 55 70, 50 65 C60 55, 65 45, 75 50 Z" fill="none" stroke="rgba(201,160,99,0.04)" stroke-width="1"/></svg>'),
+                radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.2), transparent 60%);
+            background-size: 100px 100px, 100% 100%;
+            background-attachment: fixed;
+        }
+
+        .page-border {
+            position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999;
+        }
+
+        .nav-bar { text-align: center; padding: 40px 0; position: relative; z-index: 10; }
+        .back-btn {
+            color: var(--text-muted); text-decoration: none; font-size: 1.1rem;
+            letter-spacing: 2px; transition: all 0.3s; border-bottom: 1px solid transparent;
+        }
+        .back-btn:hover { color: var(--accent-blood); border-bottom-color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
+
+        .page-title {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 3.5rem;
+            color: var(--text-main); letter-spacing: 10px; margin-bottom: 60px;
+            text-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
+        }
+
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 50px; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
+            position: relative; z-index: 1;
+        }
+
+        .oc-card {
+            background: #000; border: 1px solid rgba(201, 160, 99, 0.4);
+            padding: 12px; cursor: pointer; transition: all 0.5s ease;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .oc-card:hover { transform: translateY(-10px); border-color: var(--accent-blood); box-shadow: 0 20px 50px rgba(204, 0, 0, 0.3); }
+        .oc-card-inner { border: 1px solid #333; overflow: hidden; position: relative; aspect-ratio: 3/4; }
+        .oc-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: grayscale(80%) contrast(1.2); transition: all 0.6s ease; }
+        .oc-card:hover img { opacity: 1; filter: grayscale(0%) contrast(1); transform: scale(1.08); }
+        .card-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 15px 15px; text-align: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+        }
+        .card-name { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 5px; }
+        .card-title { font-size: 0.9rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        /* =========================================
+           终极结合：上部资料卡 + 下部长卷画廊
+           ========================================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-content {
+            background: var(--bg-card); border: 1px solid var(--accent-gold);
+            width: 95%; max-width: 1300px; max-height: 90vh; 
+            position: relative; overflow-y: auto; 
+            box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.1), 0 0 50px rgba(0, 0, 0, 0.9);
+            transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+        .modal-content::-webkit-scrollbar { width: 8px; }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--accent-blood); border-radius: 4px; }
+        .modal-content::-webkit-scrollbar-track { background: #000; }
+
+        .close-btn {
+            position: sticky; top: 20px; float: right; margin-right: 20px;
+            font-size: 1.5rem; color: #fff; cursor: pointer; z-index: 100;
+            background: rgba(139, 0, 0, 0.6); width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.3s; border: 1px solid var(--accent-gold); backdrop-filter: blur(5px);
+        }
+        .close-btn:hover { color: var(--accent-blood); background: #000; transform: rotate(90deg); }
+
+        /* 顶部标题 */
+        .modal-header {
+            text-align: center; padding: 50px 20px 30px; border-bottom: 1px solid #222;
+            background: radial-gradient(circle at top, rgba(139,0,0,0.2), transparent);
+        }
+        .modal-name { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--accent-gold); letter-spacing: 8px; margin-bottom: 10px; }
+        .modal-subtitle { font-size: 1.1rem; color: var(--accent-blood); letter-spacing: 4px; }
+
+        /* 核心档案区（左右分栏） */
+        .modal-main {
+            display: flex; padding: 50px; gap: 50px; border-bottom: 1px solid #222;
+        }
+        
+        /* 左侧立绘 */
+        .modal-left { width: 45%; position: relative; }
+        .modal-left img {
+            width: 100%; border: 1px solid #444; padding: 10px; background: #000;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+
+        /* 右侧信息 */
+        .modal-right { width: 55%; display: flex; flex-direction: column; justify-content: center; }
+        
+        .stats-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; color: var(--text-muted); font-size: 1rem; }
+        .stats-table th, .stats-table td { padding: 12px 10px; border-bottom: 1px dashed #333; }
+        .stats-table th { color: var(--accent-gold); font-weight: 600; width: 30%; font-family: 'Cinzel', serif; letter-spacing: 2px; text-align: left; }
+        .stats-table td { text-align: left; }
+
+        .story-title {
+            font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--text-main);
+            margin-bottom: 15px; display: flex; align-items: center; gap: 15px; letter-spacing: 2px;
+        }
+        .story-title::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(90deg, var(--accent-crimson), transparent); }
+
+        .modal-story {
+            line-height: 2.2; color: var(--text-muted); font-size: 1rem; text-align: justify;
+            border-left: 2px solid var(--accent-crimson); padding-left: 20px;
+        }
+
+        /* =========================================
+           底部：无尽的设定画廊
+           ========================================= */
+        .modal-gallery {
+            padding: 60px 40px; background: rgba(0,0,0,0.4);
+        }
+        .gallery-heading {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 2rem; color: var(--accent-gold);
+            margin-bottom: 50px; letter-spacing: 8px; text-shadow: 0 0 15px rgba(201,160,99,0.4);
+        }
+
+        .gallery-images {
+            display: flex; flex-direction: column; gap: 50px; align-items: center;
+        }
+        
+        .gallery-img-box {
+            width: 100%; max-width: 1000px; background: #000; border: 1px solid #333; padding: 12px;
+            position: relative; transition: all 0.5s ease; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        .gallery-img-box::before {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(201, 160, 99, 0.2); pointer-events: none; transition: all 0.4s;
+        }
+        .gallery-img-box img { width: 100%; height: auto; display: block; filter: brightness(0.9); transition: all 0.6s; }
+        
+        .gallery-img-box:hover {
+            border-color: var(--accent-blood); box-shadow: 0 0 40px rgba(139, 0, 0, 0.6); transform: translateY(-5px);
+        }
+        .gallery-img-box:hover::before { border-color: rgba(204, 0, 0, 0.5); }
+        .gallery-img-box:hover img { filter: brightness(1.1); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .modal-main { flex-direction: column; padding: 20px; gap: 20px; }
+            .modal-left, .modal-right { width: 100%; }
+            .modal-name { font-size: 2.5rem; }
+            .modal-gallery { padding: 30px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-border"></div>
+    <div class="nav-bar"><a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a></div>
+    <h1 class="page-title">OC 档 案 馆</h1>
+
+    <div class="gallery-grid">
+        <div class="oc-card" onclick="openModal('oc1')">
+            <div class="oc-card-inner">
+                <img src="oc1.png" alt="OC">
+                <div class="card-info">
+                    <h2 class="card-name">微笑处刑者</h2>
+                    <p class="card-title">"Requiem"公司 · 代号：斯迈尔</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="oc-card" onclick="openModal('oc2')">
+            <div class="oc-card-inner">
+                <img src="oc4.jpg" alt="OC">
+                <div class="card-info">
+                    <h2 class="card-name">我只是一个路过的普通学生</h2>
+                    <p class="card-title">"Requiem"公司/罗斯伍德学院学生 · 代号：斯迈尔（伪造身份）</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="oc-card" onclick="openModal('oc3')">
+            <div class="oc-card-inner">
+                <img src="oc5.jpg" alt="OC">
+                <div class="card-info">
+                    <h2 class="card-name">实验体019</h2>
+                    <p class="card-title">"Requiem"公司/罗斯伍德学院学生 · 代号：019（主人格）</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 终极结合弹窗 -->
+    <div class="modal-overlay" id="dynamic-modal">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
+            
+            <div class="modal-header">
+                <h2 class="modal-name" id="modal-name">Name</h2>
+                <p class="modal-subtitle" id="modal-subtitle">Subtitle</p>
+            </div>
+
+            <!-- 上半部：左右分栏 -->
+            <div class="modal-main">
+                <div class="modal-left">
+                    <img src="" alt="Main Image" id="modal-main-img">
+                </div>
+                <div class="modal-right">
+                    <table class="stats-table" id="modal-stats"></table>
+                    <h3 class="story-title">故事背景</h3>
+                    <div class="modal-story" id="modal-story"></div>
+                </div>
+            </div>
+
+            <!-- 下半部：长卷画廊 -->
+            <div class="modal-gallery">
+                <h3 class="gallery-heading">✟ 设 定 画 廊 ✟</h3>
+                <div class="gallery-images" id="modal-gallery-imgs"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+                // 🚨 【你的 OC 数据库】 🚨
+        const ocData = {
+            "oc1": {
+                name: "斯迈尔",
+                subtitle: "“Requiem”公司收容生物——微笑处刑者",
+                mainImg: "oc1.png", 
+                stats: {
+                    "姓名": "斯迈尔",
+                    "性别": "女", 
+                    "生日": "10月1日",
+                    "身高": "156 cm",
+                    "年龄": "不详 (外表很年轻)",
+                    "阵营": "“Requiem”公司"
+                },
+                story: "身着西装中性打扮的白发女子？“Requiem”公司的职员，同时也是“Requiem”公司的所有物，干着类似杀手的工作（但是目标不是人类），乐子人，看热闹不嫌事大，性格非常佛系，看起来大大咧咧，其实心计很深的腹黑家伙。本体是一个血肉模糊的人形怪物，嘴部严重腐烂，像在笑一样，有着非常多的瘦长手臂和遍布全身的红色眼珠。她曾经是人类，并且接受了公司对员工的肉体改造实验，但是实验结果却............",
+                gallery: [
+                    "oc7.jpg",
+                    "oc10.jpg",
+                    "oc11.jpg",
+                    "oc16.png",
+                    "oc3.jpg",
+                    "oc8.jpg",
+                    "oc6.png",
+                    "oc17.jpg",
+                    "oc9.jpg"
+                ]
+            }, // 👈 注意这里必须有一个英文逗号！
+            
+            "oc2": {
+                name: "Fallen Angel",
+                subtitle: "The Night Feather",
+                mainImg: "oc4.jpg",
+                stats: {
+                    "姓名": "斯迈尔",
+                    "性别": "女", 
+                    "生日": "10月1日",
+                    "身高": "156 cm",
+                    "年龄": "？",
+                    "阵营": "“Requiem”公司"
+                },
+                story: "斯迈尔伪造的身份。看起来活泼可爱的粉发少女，同时也是斯迈尔生前的样貌。就读于罗斯伍德学院的普通少女？",
+                gallery: [
+                    "oc2.png",
+                    "oc12.jpg",
+                    "oc13.png",
+                    "oc14.png",
+                    "oc15.png",
+                    "touxiang.jpg"
+                ]
+            }, // 👈 刚才就是这里漏了逗号！现在加上了！
+
+            "oc3": {
+                name: "这里改成第三个OC的名字", // 👈 记得改这里！
+                subtitle: "第三个人的副标题",     // 👈 记得改这里！
+                mainImg: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=1000&auto=format&fit=crop", // 换成你的图
+                stats: {
+                    "姓名": "第三个人的全名",
+                    "生日": "1月1日",
+                    "身高": "170 cm",
+                    "年龄": "20 岁",
+                    "阵营": "你的阵营"
+                },
+                story: "这里写第三个OC的故事背景...",
+                gallery: [
+                    "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1200&auto=format&fit=crop"
+                ]
+            } // 👈 因为 oc3 是最后一个，所以这里【不要】加逗号
+        };
+
+        function openModal(id) {
+            const data = ocData[id];
+            if(!data) return;
+
+            document.getElementById('modal-name').innerText = data.name;
+            document.getElementById('modal-subtitle').innerText = data.subtitle;
+            document.getElementById('modal-main-img').src = data.mainImg;
+            document.getElementById('modal-story').innerHTML = data.story;
+
+            // 生成表格
+            let tableHTML = '';
+            for (const [key, value] of Object.entries(data.stats)) {
+                tableHTML += `<tr><th>${key}</th><td>${value}</td></tr>`;
+            }
+            document.getElementById('modal-stats').innerHTML = tableHTML;
+
+            // 生成垂直画廊
+            let galleryHTML = '';
+            data.gallery.forEach(imgSrc => {
+                galleryHTML += `<div class="gallery-img-box"><img src="${imgSrc}" alt="Gallery"></div>`;
+            });
+            document.getElementById('modal-gallery-imgs').innerHTML = galleryHTML;
+
+            document.getElementById('dynamic-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.querySelector('.modal-content').scrollTop = 0;
+        }
+
+        function closeModal() {
+            document.getElementById('dynamic-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('dynamic-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
