@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OC档案馆 | 月翼smile</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
@@ -182,7 +183,8 @@
             .modal-left, .modal-right { width: 100%; }
             .modal-name { font-size: 2.5rem; }
             .modal-gallery { padding: 30px 15px; }
-        }
+       
+
     </style>
 </head>
 <body>
@@ -194,7 +196,8 @@
     <div class="gallery-grid">
         <div class="oc-card" onclick="openModal('oc1')">
             <div class="oc-card-inner">
-                <img src="https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png@1052w_!web-dynamic.avif" alt="OC">
+                <img src="https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png" alt="OC">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
                 <div class="card-info">
                     <h2 class="card-name">微笑处刑者</h2>
                     <p class="card-title">"Requiem"公司 · 代号：斯迈尔</p>
@@ -203,8 +206,9 @@
         </div>
 
         <div class="oc-card" onclick="openModal('oc2')">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
             <div class="oc-card-inner">
-                <img src="https://cdn.jsdelivr.net/gh/yueyismile/yueyismile.github.io@main/oc4.jpg" alt="OC">
+                <img src="https://i2.hdslb.com/bfs/new_dyn/f4e9dd0f117ca2c3c16cedee80d5f3df449174100.jpg" alt="OC">
                 <div class="card-info">
                     <h2 class="card-name">我只是一个路过的普通学生</h2>
                     <p class="card-title">"Requiem"公司/罗斯伍德学院学生 · 代号：斯迈尔（伪造身份）</p>
@@ -213,8 +217,9 @@
         </div>
 
         <div class="oc-card" onclick="openModal('oc3')">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
             <div class="oc-card-inner">
-                <img src="https://i2.hdslb.com/bfs/new_dyn/d6df1e26d932e75daba58ee3cf2b4068449174100.jpg@1052w_!web-dynamic.avif" alt="OC">
+                <img src="https://i2.hdslb.com/bfs/new_dyn/d6df1e26d932e75daba58ee3cf2b4068449174100.jpg" alt="OC">
                 <div class="card-info">
                     <h2 class="card-name">实验体019</h2>
                     <p class="card-title">"Requiem"公司/罗斯伍德学院学生 · 代号：019（主人格）</p>
@@ -237,6 +242,11 @@
             <div class="modal-main">
                 <div class="modal-left">
                     <img src="" alt="Main Image" id="modal-main-img">
+                    <div style="position: relative;">
+    <img src="" alt="Main Image" id="modal-main-img">
+    <!-- 👇 加这行 👇 -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 3rem; font-weight: 900; color: rgba(255, 255, 255, 0.5); text-shadow: 0px 0px 15px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 5px;">月翼smile</div>
+</div>
                 </div>
                 <div class="modal-right">
                     <table class="stats-table" id="modal-stats"></table>
@@ -260,7 +270,7 @@
             "oc1": {
                 name: "斯迈尔",
                 subtitle: "“Requiem”公司收容生物——微笑处刑者",
-                mainImg: "https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png@1052w_!web-dynamic.avif", 
+                mainImg: "https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png", 
                 stats: {
                     "姓名": "斯迈尔",
                     "性别": "女", 
@@ -271,22 +281,22 @@
                 },
                 story: "身着西装中性打扮的白发女子？“Requiem”公司的职员，同时也是“Requiem”公司的所有物，干着类似杀手的工作（但是目标不是人类），乐子人，看热闹不嫌事大，性格非常佛系，看起来大大咧咧，其实心计很深的腹黑家伙。本体是一个血肉模糊的人形怪物，嘴部严重腐烂，像在笑一样，有着非常多的瘦长手臂和遍布全身的红色眼珠。她曾经是人类，并且接受了公司对员工的肉体改造实验，但是实验结果却............",
                 gallery: [
-                    "https://i2.hdslb.com/bfs/new_dyn/93c36ffc3250e0c36a6f2393aefc56ef449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/5820f149225a6f243c22e29c116e59d9449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/bc046450feccd5dda4b00c6ccaccf63c449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/f10f5300d16423b96f066de663cf2fc2449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/67bbbe2b6c2402cb88f4e1198589aa08449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/20def8b22d68dc1c49e000730d8b5dfe449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/ebb0402143469fa6e3640fc3f7f2d7ef449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/7ac9cc759ed77fb1bd51842a24fe45bc449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/06d831b4ccdf8749318007245e0b9f67449174100.jpg@1052w_!web-dynamic.avif"
+                    "https://i2.hdslb.com/bfs/new_dyn/93c36ffc3250e0c36a6f2393aefc56ef449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/5820f149225a6f243c22e29c116e59d9449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/bc046450feccd5dda4b00c6ccaccf63c449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/f10f5300d16423b96f066de663cf2fc2449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/67bbbe2b6c2402cb88f4e1198589aa08449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/20def8b22d68dc1c49e000730d8b5dfe449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/ebb0402143469fa6e3640fc3f7f2d7ef449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/7ac9cc759ed77fb1bd51842a24fe45bc449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/06d831b4ccdf8749318007245e0b9f67449174100.jpg"
                 ]
             }, // 👈 注意这里必须有一个英文逗号！
             
             "oc2": {
                 name: "Fallen Angel",
                 subtitle: "The Night Feather",
-                mainImg: "https://i2.hdslb.com/bfs/new_dyn/f4e9dd0f117ca2c3c16cedee80d5f3df449174100.jpg@1052w_!web-dynamic.avif",
+                mainImg: "https://i2.hdslb.com/bfs/new_dyn/f4e9dd0f117ca2c3c16cedee80d5f3df449174100.jpg",
                 stats: {
                     "姓名": "斯迈尔",
                     "性别": "女", 
@@ -297,19 +307,19 @@
                 },
                 story: "斯迈尔伪造的身份。看起来活泼可爱的粉发少女，同时也是斯迈尔生前的样貌。就读于罗斯伍德学院的普通少女？",
                 gallery: [
-                    "https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/903c10884483ac62c891c743f3acf6ad449174100.jpg@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/3405b6ec3f4618f2f16316a312319efa449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/44d10e7aee5d517a5596927a261a89e7449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/44f11699cb551c3295bc4e231fa9296f449174100.png@1052w_!web-dynamic.avif",
-                    "https://i2.hdslb.com/bfs/new_dyn/d16ee920cf44330bc75c323ff221b760449174100.jpg@1052w_!web-dynamic.avif"
+                    "https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/903c10884483ac62c891c743f3acf6ad449174100.jpg",
+                    "https://i2.hdslb.com/bfs/new_dyn/3405b6ec3f4618f2f16316a312319efa449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/44d10e7aee5d517a5596927a261a89e7449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/44f11699cb551c3295bc4e231fa9296f449174100.png",
+                    "https://i2.hdslb.com/bfs/new_dyn/d16ee920cf44330bc75c323ff221b760449174100.jpg"
                 ]
             }, // 👈 刚才就是这里漏了逗号！现在加上了！
 
             "oc3": {
                 name: "这里改成第三个OC的名字", // 👈 记得改这里！
                 subtitle: "第三个人的副标题",     // 👈 记得改这里！
-                mainImg: "https://i2.hdslb.com/bfs/new_dyn/d6df1e26d932e75daba58ee3cf2b4068449174100.jpg@1052w_!web-dynamic.avif", // 换成你的图
+                mainImg: "https://i2.hdslb.com/bfs/new_dyn/d6df1e26d932e75daba58ee3cf2b4068449174100.jpg", // 换成你的图
                 stats: {
                     "姓名": "第三个人的全名",
                     "生日": "1月1日",
@@ -343,7 +353,7 @@
             // 生成垂直画廊
             let galleryHTML = '';
             data.gallery.forEach(imgSrc => {
-                galleryHTML += `<div class="gallery-img-box"><img src="${imgSrc}" alt="Gallery"></div>`;
+                galleryHTML += `<div class="gallery-img-box" style="position: relative;"><img referrerpolicy="no-referrer" src="${imgSrc}" alt="Gallery" loading="lazy"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 3rem; font-weight: 900; color: rgba(255, 255, 255, 0.5); text-shadow: 0px 0px 15px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 5px;">月翼smile</div></div>`;
             });
             document.getElementById('modal-gallery-imgs').innerHTML = galleryHTML;
 
