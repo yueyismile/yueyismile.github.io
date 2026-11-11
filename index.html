@@ -415,7 +415,7 @@
             <path d="M50 10 L50 5 M50 90 L50 95 M10 50 L5 50 M90 50 L95 50" stroke="var(--accent-gold)" stroke-width="1"/>
         </svg>
 
-        <h1 class="hero-title">月翼smile</h1>
+        <h1 class="hero-title">月翼smile的小站</h1>
         <div class="hero-divider">
             <div class="divider-line"></div>
             <div class="divider-diamond"></div>
@@ -529,5 +529,157 @@
             petalsContainer.appendChild(petal);
         }
     </script>
+    <!-- 🎵 无缝续播播放器 -->
+<audio id="bgm" loop>
+    <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" title="播放/暂停音乐">
+    <i class="fas fa-music"></i>
+</button>
+
+<style>
+    /* （样式保持不变） */
+    #music-btn {
+        position: fixed; bottom: 40px; right: 40px;
+        width: 50px; height: 50px; border-radius: 50%;
+        background: rgba(8, 8, 10, 0.9);
+        border: 1px solid #c9a063; color: #c9a063;
+        font-size: 1.2rem; cursor: pointer; z-index: 9999;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+        display: flex; justify-content: center; align-items: center;
+    }
+    #music-btn:hover { background: #8b0000; color: #fff; }
+    #music-btn.playing i { animation: spin 3s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+
+<script>
+    const bgm = document.getElementById('bgm');
+    const musicBtn = document.getElementById('music-btn');
+
+    // 1. 恢复上次切页前的播放进度
+    const savedTime = sessionStorage.getItem('bgmTime');
+    if (savedTime) {
+        bgm.currentTime = parseFloat(savedTime);
+    }
+
+    // 2. 记录当前播放进度，存在浏览器里
+    bgm.addEventListener('timeupdate', () => {
+        sessionStorage.setItem('bgmTime', bgm.currentTime);
+    });
+
+    // 3. 尝试自动续播（如果上一个页面正在播）
+    const wasPlaying = sessionStorage.getItem('bgmPlaying') === 'true';
+    if (wasPlaying) {
+        bgm.play().then(() => {
+            musicBtn.classList.add('playing');
+            musicBtn.style.color = '#cc0000';
+        }).catch((e) => {
+            // 浏览器的安全限制会拦截自动播放，我们给个提示
+            console.log("浏览器拦截了自动播放，等待用户点击");
+        });
+    }
+
+    // 4. 手动点击按钮
+    musicBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // 防止触发全屏点击事件
+        toggleMusic();
+    });
+
+    // 5. 首次进入，点击网页任何地方都能开启音乐（突破浏览器限制的最佳办法）
+    let hasClicked = false;
+    document.addEventListener('click', function() {
+        if (!hasClicked && bgm.paused) {
+            hasClicked = true;
+            toggleMusic();
+        }
+    });
+
+    function toggleMusic() {
+        if (bgm.paused) {
+            bgm.play();
+            sessionStorage.setItem('bgmPlaying', 'true'); // 记录正在播放
+            musicBtn.classList.add('playing');
+            musicBtn.style.color = '#cc0000';
+        } else {
+            bgm.pause();
+            sessionStorage.setItem('bgmPlaying', 'false'); // 记录已暂停
+            musicBtn.classList.remove('playing');
+            musicBtn.style.color = '#c9a063';
+        }
+    }
+</script>
+
+<!-- 底部音乐版权声明 (已适配哥特风) -->
+<div style="text-align: center; color: #8a8a93; font-size: 0.85rem; padding: 30px 20px; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; line-height: 2;">
+    <p style="margin: 0;">
+        Music by 
+        <a href="https://pixabay.com/users/sutton-cinematic-54886804/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" 
+           target="_blank" 
+           style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">
+           Sutton Marek
+        </a> 
+        from 
+        <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" 
+           target="_blank" 
+           style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">
+           Pixabay
+        </a>
+    </p>
+</div>
+<!-- 🥀 全站玫瑰花瓣雨一键安装包 -->
+<script>
+    // 自动创建花瓣容器
+    const petalBox = document.createElement('div');
+    petalBox.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:50; overflow:hidden;";
+    document.body.appendChild(petalBox);
+
+    // 自动生成动态样式
+    const petalStyle = document.createElement('style');
+    petalStyle.innerHTML = `
+        @keyframes fall {
+            0% { top: -10vh; opacity: 0; transform: scale(0.8); }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% { top: 110vh; opacity: 0; transform: scale(1.2); }
+        }
+        @keyframes sway {
+            0% { transform: translateX(-50px) rotate(0deg); }
+            100% { transform: translateX(50px) rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(petalStyle);
+
+    // 自动生成150片血色花瓣
+    const colors = [
+        'radial-gradient(circle at 30% 30%, #ff1a1a, #4a0000)',
+        'radial-gradient(circle at 30% 30%, #cc0000, #1a0000)',
+        'radial-gradient(circle at 30% 30%, #8b0000, #2a0000)',
+        'radial-gradient(circle at 30% 30%, #660000, #0a0000)'
+    ];
+    
+    for (let i = 0; i < 150; i++) {
+        const petal = document.createElement('div');
+        const size = Math.random() * 18 + 5; 
+        
+        // 直接把所有样式写在花瓣身上
+        petal.style.cssText = `
+            position: absolute; 
+            border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; 
+            opacity: 0; 
+            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
+            width: ${size}px; 
+            height: ${size}px; 
+            left: ${Math.random() * 100}vw; 
+            background: ${colors[Math.floor(Math.random() * colors.length)]}; 
+            animation: fall linear infinite, sway ease-in-out infinite alternate; 
+            animation-duration: ${Math.random() * 8 + 6}s, ${Math.random() * 2 + 1.5}s; 
+            animation-delay: ${Math.random() * 15}s, 0s; 
+            transform: rotate(${Math.random() * 360}deg);
+        `;
+        petalBox.appendChild(petal);
+    }
+</script>
 </body>
 </html>
