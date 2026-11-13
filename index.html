@@ -495,6 +495,143 @@
             </div>
         </div>
     </section>
+        <!-- 🎮 第二个游戏：Ren'Py 视觉小说展示区 -->
+    <section style="padding: 80px 5% 100px; position: relative; z-index: 1; background: radial-gradient(circle at center, rgba(201,160,99,0.08), transparent 70%); border-top: 1px solid rgba(139,0,0,0.2);">
+        <h2 class="big-title reveal" style="margin-bottom: 40px;">Rotten Utopia</h2>
+        
+        <div class="reveal" style="max-width: 1000px; margin: 0 auto; background: rgba(8, 8, 10, 0.85); border: 1px solid var(--accent-blood); box-shadow: 0 0 40px rgba(201,160,99,0.2), inset 0 0 50px rgba(0,0,0,0.9); border-radius: 6px; display: flex; flex-wrap: wrap; overflow: hidden; position: relative;">
+            
+            <!-- 左侧：Ren'Py 游戏封面 (你可以换成你游戏的封面图) -->
+            <div style="flex: 1 1 400px; min-height: 350px; position: relative; border-right: 1px solid #333;">
+                <!-- 先用一张占位图，你可以换成游戏里带血的场景图 -->
+                <img src="https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png" alt="Rotten Utopia 封面" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; filter: grayscale(60%) contrast(1.3) sepia(30%); opacity: 0.8;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, transparent, rgba(8,8,10,0.9)); pointer-events: none;"></div>
+            </div>
+
+            <!-- 右侧：游戏介绍与按钮区 -->
+            <div style="flex: 1 1 500px; padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2;">
+                <h3 style="font-family: 'Cinzel', serif; font-size: 2.2rem; color: #c9a063; margin-bottom: 10px; letter-spacing: 3px; text-shadow: 0 0 15px rgba(139,0,0,0.5);">Rotten Utopia</h3>
+                
+                <!-- 游戏标签 -->
+                <div style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
+                    <span style="padding: 4px 12px; background: rgba(201,160,99,0.1); border: 1px solid var(--accent-gold); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">Ren'Py</span>
+                    <span style="padding: 4px 12px; background: rgba(201,160,99,0.1); border: 1px solid var(--accent-gold); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">视觉小说</span>
+                    <span style="padding: 4px 12px; background: rgba(201,160,99,0.1); border: 1px solid var(--accent-gold); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">心理悬疑</span>
+                </div>
+
+                <!-- 游戏简介文案 (你可以自己在这里改字) -->
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 2; text-align: justify; margin-bottom: 35px;">
+                    “如果你无法逃离这片腐坏的乐园，那就试着拥抱深渊吧。<br><br>
+                    这是一款使用 Ren'Py 制作的视觉小说。随着剧情推进，你将深入主角残缺的潜意识，在充满血污与谎言的记忆迷宫中做出选择。不同的决定，将引向截然不同的终结......”
+                </p>
+
+                <!-- 核心操作按钮区 -->
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
+                    <!-- 在线游玩 (可以点) -->
+                    <a href="renpy.html" class="btn-epic" style="padding: 12px 30px; color: #fff; border-color: var(--accent-blood); background: rgba(139,0,0,0.4); box-shadow: 0 0 20px rgba(204,0,0,0.4);">
+                        <i class="fas fa-gamepad" style="margin-right: 8px;"></i> 在线游玩~
+                    </a>
+                    
+                    <!-- Windows 版 (按不动) -->
+                    <div class="social-btn" style="cursor: not-allowed; opacity: 0.5; padding: 12px 20px; border-color: #555; color: #999; margin-left: 10px;">
+                        <i class="fab fa-windows"></i> Windows版
+                        <span style="font-size: 0.75rem; color: var(--accent-gold); margin-left: 8px;">(想要下载请B站私信我)</span>
+                    </div>
+
+                    <!-- 安卓 版 (按不动) -->
+                    <div class="social-btn" style="cursor: not-allowed; opacity: 0.5; padding: 12px 20px; border-color: #555; color: #999;">
+                        <i class="fab fa-android"></i> 安卓版
+                        <span style="font-size: 0.75rem; color: var(--accent-gold); margin-left: 8px;">(想要下载请B站私信我)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🖼️ 第二个游戏的实机画展区 -->
+        <div class="reveal" style="max-width: 1000px; margin: 50px auto 0;">
+            <h3 style="text-align: center; font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 30px;">
+                <i class="fas fa-camera-retro" style="font-size: 1.2rem; margin-right: 10px;"></i> 实 机 画 面
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- 视觉小说截图 1 (替换 src 链接) -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/72a28b68cddca1e0ef1dc2ab3fbad61f449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 2 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/b32dc7f767e14c88752e34d479b4d3f0449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/e03c77e219e7c98160478850b61f9991449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/a6ba22c431610504d7c19316818c0abd449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/75e2eb88f47cbab9df68b683b530766b449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/668869509cb4e5fa4ae11e51bedfce2c449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/ccd512212bf8e6b7829d6eb5f57130ad449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/a907553ffee674068eb44d1b788d68aa449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 视觉小说截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/28231e2dd495c4822778d59286aecae0449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                
+            </div>
+        </div>
+                <!-- 📜 游戏素材借物表 -->
+    <section style="padding: 40px 5% 80px; position: relative; z-index: 1; text-align: center;">
+        <details style="max-width: 800px; margin: 0 auto; background: rgba(8, 8, 10, 0.6); border: 1px dashed rgba(201, 160, 99, 0.4); border-radius: 4px; text-align: left;">
+            <!-- 点击展开的标题 -->
+            <summary style="padding: 15px 20px; cursor: pointer; font-family: 'Cinzel', serif; color: var(--accent-gold); font-size: 1.1rem; letter-spacing: 2px; outline: none;">
+                ✟ 游戏企划 素材借物表 (点击展开) ✟
+            </summary>
+            
+            <!-- 展开后的内容 -->
+            <div style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.8;">
+                <p style="margin-bottom: 15px; color: #aaa;">* 本网站游戏使用的相关素材版权归原作者所有，在此鸣谢。</p>
+                <p style="color: #c9a063; font-weight: bold; margin-bottom: 5px;">游戏Rotten Utopia使用了音乐如下：</p>
+                <p style="color: #c9a063; font-weight: bold; margin-bottom: 5px;">【游戏标题界面】</p>
+                <p style="margin-bottom: 15px;">
+                    CatasTrOphe | 作者：Tak_mfk<br>
+                    <a href="https://youtube.com/@tak_mfk6101?feature=shared" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.85rem;">https://youtube.com/@tak_mfk6101</a>
+                </p>
+
+                <p style="color: #c9a063; font-weight: bold; margin-bottom: 5px;">【游戏内 BGM (按出现顺序)】</p>
+                
+                <p>1. 廃墟のアリス人形 | 作者：EigHt<br>
+                <a href="https://youtube.com/@eight_novel?feature=shared" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.85rem;">https://youtube.com/@eight_novel</a></p>
+                
+                <p>2. CatasTrOphe | 作者：Tak_mfk<br>
+                <a href="https://youtube.com/@tak_mfk6101?feature=shared" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.85rem;">https://youtube.com/@tak_mfk6101</a></p>
+                
+                <p>3. アンデッドパレード | 作者：EigHt<br>
+                <a href="https://youtube.com/@eight_novel?feature=shared" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.85rem;">https://youtube.com/@eight_novel</a></p>
+                
+                <p>4. 闇夜に輝くステンドグラス | 作者：EigHt<br>
+                <a href="https://youtube.com/@eight_novel?feature=shared" target="_blank" style="color: var(--text-main); text-decoration: underline; font-size: 0.85rem;">https://youtube.com/@eight_novel</a></p>
+                
+                <hr style="border: 0; border-top: 1px dashed #333; margin: 20px 0;">
+                
+                <p style="color: #c9a063; font-weight: bold; margin-bottom: 5px;">游戏Utopia使用了音乐如下：</p>
+                <p>部分 UI、音效及默认素材来自 <strong>RPG Maker MV 官方素材库</strong>。</p>
+            </div>
+        </details>
+    </section>
 
     <!-- 音乐播放器 & 回顶 -->
     <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>视觉小说 | Rotten Utopia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #030304; overflow: hidden; }
+        
+        /* 游戏画面自适应铺满全屏 */
+        iframe { 
+            width: 100vw; height: 100vh; 
+            border: none; display: block; 
+            position: relative; z-index: 1; 
+        }
+        
+        /* 左上角专属返回按钮 */
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background: rgba(8, 8, 10, 0.85); 
+            border: 1px solid #c9a063; color: #c9a063;
+            padding: 10px 20px; border-radius: 4px;
+            font-family: 'Noto Serif SC', serif; font-size: 1rem;
+            text-decoration: none; z-index: 9999;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s; box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+        .back-btn:hover { background: #8b0000; color: #fff; box-shadow: 0 0 20px rgba(204,0,0,0.6); transform: translateX(-5px); }
+
+        /* =========================================
+           极度沉浸的加载遮罩层 (完全复刻版)
+           ========================================= */
+        #game-loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #030304; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        #game-loader.hidden { opacity: 0; visibility: hidden; }
+
+        /* 旋转的血色魔法阵 */
+        .magic-circle-loader {
+            width: 140px; height: 140px; border-radius: 50%;
+            border: 2px dashed #8b0000; border-top-color: #c9a063;
+            animation: spin 4s linear infinite; position: absolute; 
+            box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
+        }
+        .magic-circle-loader::before {
+            content: '✟'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: #c9a063; font-size: 2.5rem; font-weight: bold;
+        }
+        .magic-circle-loader::after {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border-radius: 50%; border: 1px solid rgba(201, 160, 99, 0.3);
+            animation: spin-reverse 6s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+
+        /* 动态台词文字 */
+        #loading-text {
+            margin-top: 220px;
+            font-family: 'Noto Serif SC', serif; color: #8a8a93; font-size: 1.1rem;
+            letter-spacing: 4px; text-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
+            animation: pulseText 1.5s infinite alternate;
+            text-align: center;
+        }
+        @keyframes pulseText { 
+            0% { opacity: 0.4; } 
+            100% { opacity: 1; color: #c9a063; } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 沉浸式加载遮罩 -->
+    <div id="game-loader">
+        <div class="magic-circle-loader"></div>
+        <div id="loading-text">正在初始化视界引擎...</div>
+    </div>
+
+    <!-- 返回按钮 -->
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a>
+
+    <!-- 👇 这里的网址是你刚刚测试成功的 Ren'Py 游戏网址 👇 -->
+    <iframe id="game-iframe" src="https://yueyismile.github.io/my-renpy-game/" allowfullscreen></iframe>
+
+    <script>
+        const iframe = document.getElementById('game-iframe');
+        const loader = document.getElementById('game-loader');
+        const loadingText = document.getElementById('loading-text');
+
+        // 为 Ren'Py 定制的台词库
+        const quotes = [
+            "正在读取深层记忆存档...",
+            "正在构建暗夜分支节点...",
+            "警告：检测到不可名状的情绪波动...",
+            "正在同步主角的潜意识形态...",
+            "命运的齿轮正在咬合...",
+            "请保持理智，游戏即将开始..."
+        ];
+
+        let quoteIndex = 0;
+        const textInterval = setInterval(() => {
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+            loadingText.style.opacity = 0;
+            setTimeout(() => {
+                loadingText.innerText = quotes[quoteIndex];
+                loadingText.style.opacity = 1;
+            }, 200);
+        }, 1500);
+
+        // Ren'Py 网页版加载通常比 RPG Maker 慢，所以这里多给它 2 秒的缓冲时间
+        iframe.onload = function() {
+            clearInterval(textInterval);
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 2000); 
+        };
+
+        // 终极保底：如果 15 秒了还卡着，强行撤掉遮罩让玩家看看到底怎么了
+        setTimeout(() => {
+            if (!loader.classList.contains('hidden')) {
+                clearInterval(textInterval);
+                loadingText.innerText = "视界连接超时，正在尝试强制切入...";
+                setTimeout(() => { loader.classList.add('hidden'); }, 1500);
+            }
+        }, 15000);
+    </script>
+</body>
+</html>
