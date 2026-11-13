@@ -9,8 +9,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' stroke='%23c9a063' stroke-width='8' fill='none'/><line x1='50' y1='50' x2='50' y2='20' stroke='%23c9a063' stroke-width='6' stroke-linecap='round'/><line x1='50' y1='50' x2='80' y2='50' stroke='%238b0000' stroke-width='4' stroke-linecap='round'/><circle cx='50' cy='50' r='5' fill='%23c9a063'/></svg>">
     
     <!-- 📇 社交分享高级卡片 -->
-    <meta property="og:title" content="月翼smile的小站 | 暗夜圣殿">
-    <meta property="og:description" content="欢迎来到我的暗夜领域，这里存放着我的OC设定、故事与阵营档案。">
+    <meta property="og:title" content="月翼smile的小站">
+    <meta property="og:description" content="欢迎来到我的小站，这里存放着我的OC设定、故事与游戏。">
     <meta property="og:image" content="https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png@1052w_!web-dynamic.avif">
     <meta property="og:url" content="https://yueyismile.github.io">
     <meta property="og:type" content="website">
@@ -231,6 +231,17 @@
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: #040405; border-left: 1px solid #1a1a1a; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--accent-crimson), var(--accent-blood)); border-radius: 5px; border: 1px solid var(--accent-gold); }
+
+        /* 游戏画廊悬停特效 */
+        .game-img-box:hover {
+            border-color: var(--accent-blood) !important;
+            box-shadow: 0 0 25px rgba(204, 0, 0, 0.5) !important;
+            transform: translateY(-5px);
+        }
+        .game-img-box:hover img {
+            filter: grayscale(0%) !important;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -251,12 +262,12 @@
 
     <!-- 3. 右键菜单 -->
     <div id="custom-context-menu">
-        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
+        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回主页</div>
         <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
         <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
         <div onclick="window.location.href='timeline.html'"><i class="fas fa-hourglass-half"></i> 时间线</div>
         <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
-        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
+        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 感谢浏览！</div>
     </div>
 
     <div class="page-border"></div>
@@ -387,51 +398,84 @@
         </div>
     </section>
 
-    <!-- 音乐播放器 -->
-    <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
-    <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
-    <button id="back-to-top" title="回到顶部"><i class="fas fa-chevron-up"></i></button>
-        <!-- 🎮 游戏企划展示区 -->
+    <!-- 🎮 游戏企划展示区 -->
     <section style="padding: 80px 5% 100px; position: relative; z-index: 1; background: radial-gradient(circle at center, rgba(139,0,0,0.15), transparent 70%); border-top: 1px solid rgba(201, 160, 99, 0.2);">
         <h2 class="big-title reveal" style="margin-bottom: 40px;">o c 游 戏 展 示</h2>
         
         <div class="reveal" style="max-width: 1000px; margin: 0 auto; background: rgba(8, 8, 10, 0.85); border: 1px solid var(--accent-gold); box-shadow: 0 0 40px rgba(139,0,0,0.3), inset 0 0 50px rgba(0,0,0,0.9); border-radius: 6px; display: flex; flex-wrap: wrap; overflow: hidden; position: relative;">
             
-            <!-- 左侧：游戏封面/氛围图 (如果你有游戏截图，可以把下面 src 替换掉) -->
+            <!-- 左侧：游戏封面 -->
             <div style="flex: 1 1 400px; min-height: 350px; position: relative; border-right: 1px solid #333;">
                 <img src="https://i2.hdslb.com/bfs/new_dyn/2ebb93a52670e2c98f446038df2b65c9449174100.jpg@1052w_!web-dynamic.avif" alt="游戏封面" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; filter: grayscale(40%) contrast(1.2); opacity: 0.8;">
-                <!-- 图片上的暗黑遮罩 -->
                 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, transparent, rgba(8,8,10,0.9)); pointer-events: none;"></div>
             </div>
 
-            <!-- 右侧：游戏介绍文案 -->
+            <!-- 右侧：游戏介绍与按钮区 -->
             <div style="flex: 1 1 500px; padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2;">
-                <h3 style="font-family: 'Cinzel', serif; font-size: 2.2rem; color: #fff; margin-bottom: 10px; letter-spacing: 3px; text-shadow: 0 0 15px rgba(201,160,99,0.5);">Requiem : 暗夜残响</h3>
+                <h3 style="font-family: 'Cinzel', serif; font-size: 2.2rem; color: #fff; margin-bottom: 10px; letter-spacing: 3px; text-shadow: 0 0 15px rgba(201,160,99,0.5);">Utopia</h3>
                 
                 <!-- 游戏标签 -->
                 <div style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
                     <span style="padding: 4px 12px; background: rgba(139,0,0,0.3); border: 1px solid var(--accent-blood); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">RPG Maker MV</span>
-                    <span style="padding: 4px 12px; background: rgba(139,0,0,0.3); border: 1px solid var(--accent-blood); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">角色扮演</span>
-                    <span style="padding: 4px 12px; background: rgba(139,0,0,0.3); border: 1px solid var(--accent-blood); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">微恐悬疑</span>
+                    <span style="padding: 4px 12px; background: rgba(139,0,0,0.3); border: 1px solid var(--accent-blood); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">恐怖猎奇</span>
+                    <span style="padding: 4px 12px; background: rgba(139,0,0,0.3); border: 1px solid var(--accent-blood); color: #ddd; font-size: 0.8rem; border-radius: 2px; letter-spacing: 1px;">百合/水仙向</span>
                 </div>
 
                 <!-- 游戏简介文案 -->
                 <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 2; text-align: justify; margin-bottom: 35px;">
-                    “在这座被遗忘的罗斯伍德学院深处，隐藏着不可名状的恐惧。<br><br>
-                    作为 Requiem 公司的处刑人，你接到了一个看似寻常的委托。但当你踏入这片暗夜领域时，宿命的齿轮已经开始转动。每一次选择，每一场战斗，都将拨开这所学院虚伪的表象，揭开关于‘019’的终极秘密……”
+                    “这是我三年前给oc制作的游戏，使用RPG MAKER制作，现在来看已经是黑历史了。如果不嫌弃的话可以玩玩看，刚好最近把它弄成了网页版，但是bug可能会有点多。（如果安卓/Windows安装包下载不了，或者网页版出了什么问题的话可以B站私信我，虽然这就是一个没啥东西的垃圾小游戏，嘿嘿~）<br><br>
+                    游戏内容：一个粗糙的RPG小游戏，讲的是主角019从睡梦中醒来，发现自己失去了记忆，身处于一个陌生的怪物遍布的地方。一个和祂长得一模一样的少女022救了祂，并愿意帮助祂找回记忆。带祂在这个满是自己的世界寻找一切的真相的故事······（编不下去了，其实我没做完~有些内容已经是oc旧设啦~(=･ω･=)）”
                 </p>
 
-                <!-- 启动按钮 -->
-                <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
-                    <!-- 这里的链接指向我们刚才做的全屏游戏页面 game.html -->
-                    <a href="game.html" class="btn-epic" style="padding: 15px 50px; color: #fff; border-color: var(--accent-blood); background: rgba(139,0,0,0.4); box-shadow: 0 0 20px rgba(204,0,0,0.4);">
-                        <i class="fas fa-gamepad" style="margin-right: 10px;"></i> 载入游戏档案
+                <!-- 核心操作按钮区 -->
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
+                    <!-- 在线游玩 (可以点) -->
+                    <a href="game.html" class="btn-epic" style="padding: 12px 30px; color: #fff; border-color: var(--accent-blood); background: rgba(139,0,0,0.4); box-shadow: 0 0 20px rgba(204,0,0,0.4);">
+                        <i class="fas fa-gamepad" style="margin-right: 8px;"></i> 在线游玩~
                     </a>
-                    <span style="font-size: 0.85rem; color: #666; font-style: italic;"><i class="fas fa-info-circle"></i> 建议在电脑端体验</span>
+                    
+                    <!-- Windows 版 (按不动) -->
+                    <div class="social-btn" style="cursor: not-allowed; opacity: 0.5; padding: 12px 20px; border-color: #555; color: #999; margin-left: 10px;">
+                        <i class="fab fa-windows"></i> Windows版
+                        <span style="font-size: 0.75rem; color: var(--accent-gold); margin-left: 8px;">(想要下载请B站私信我)</span>
+                    </div>
+
+                    <!-- 安卓 版 (按不动) -->
+                    <div class="social-btn" style="cursor: not-allowed; opacity: 0.5; padding: 12px 20px; border-color: #555; color: #999;">
+                        <i class="fab fa-android"></i> 安卓版
+                        <span style="font-size: 0.75rem; color: var(--accent-gold); margin-left: 8px;">(想要下载请B站私信我)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🖼️ 游戏内容画廊区 -->
+        <div class="reveal" style="max-width: 1000px; margin: 50px auto 0;">
+            <h3 style="text-align: center; font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 30px;">
+                <i class="fas fa-camera-retro" style="font-size: 1.2rem; margin-right: 10px;"></i> 实 机 画 面
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- 截图 1 (如果你有真实的游戏截图，替换这里的 src 即可) -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 截图 2 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
+                </div>
+                <!-- 截图 3 -->
+                <div class="game-img-box" style="border: 1px solid #333; padding: 6px; background: #000; transition: all 0.3s; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+                    <img src="https://i2.hdslb.com/bfs/new_dyn/67bbbe2b6c2402cb88f4e1198589aa08449174100.jpg" style="width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(50%); transition: all 0.3s;">
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- 音乐播放器 & 回顶 -->
+    <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
+    <button id="back-to-top" title="回到顶部"><i class="fas fa-chevron-up"></i></button>
 
     <!-- 底部版权声明 -->
     <div style="text-align: center; color: #8a8a93; font-size: 0.85rem; padding: 30px 20px; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; line-height: 2;">
