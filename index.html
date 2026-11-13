@@ -5,46 +5,68 @@
     <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>月翼smile的小站 </title>
+    
+    <!-- 📇 社交分享高级卡片 (已移至正确位置) -->
+    <meta property="og:title" content="月翼smile的小站 | 暗夜圣殿">
+    <meta property="og:description" content="欢迎来到我的暗夜领域，这里存放着我的OC设定、故事与阵营档案。">
+    <meta property="og:image" content="这里填一张你最美的OC图链接.jpg">
+    <meta property="og:url" content="https://yueyismile.github.io">
+    <meta property="og:type" content="website">
+
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-dark: #030304;
-            --bg-card: rgba(10, 10, 14, 0.85);
-            --text-main: #e8e8eb;
-            --text-muted: #8a8a93;
-            --accent-gold: #c9a063;
-            --accent-crimson: #8b0000;
-            --accent-blood: #cc0000;
+            --bg-dark: #030304; --bg-card: rgba(10, 10, 14, 0.85);
+            --text-main: #e8e8eb; --text-muted: #8a8a93;
+            --accent-gold: #c9a063; --accent-crimson: #8b0000; --accent-blood: #cc0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Noto Serif SC', serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            /* 极繁暗纹 + 强烈的呼吸红光 */
+            background-color: var(--bg-dark); color: var(--text-main);
+            font-family: 'Noto Serif SC', serif; overflow-x: hidden;
+            scroll-behavior: smooth; cursor: crosshair;
             background-image: 
                 url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 25 C60 35, 70 45, 50 65 C30 45, 40 35, 50 25 Z M50 65 C60 75, 70 85, 50 95 C30 85, 40 75, 50 65 Z M25 50 C35 60, 45 70, 50 65 C40 55, 35 45, 25 50 Z M75 50 C65 60, 55 70, 50 65 C60 55, 65 45, 75 50 Z" fill="none" stroke="rgba(201,160,99,0.04)" stroke-width="1"/><circle cx="50" cy="50" r="2" fill="rgba(139,0,0,0.08)"/></svg>'),
                 radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.25), transparent 60%),
                 radial-gradient(circle at 50% 100%, rgba(139, 0, 0, 0.2), transparent 60%);
             background-size: 100px 100px, 100% 100%, 100% 100%;
-            background-attachment: fixed;
-            position: relative;
+            background-attachment: fixed; position: relative;
         }
+
+        /* === 进站加载动画 === */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #030304; z-index: 99999999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        #loading-screen.hidden { opacity: 0; visibility: hidden; }
+        .magic-circle-loader {
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 2px dashed #8b0000; border-top-color: #c9a063;
+            animation: spin 3s linear infinite; position: absolute;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.4);
+        }
+        .magic-circle-loader::after {
+            content: '✟'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: #c9a063; font-size: 2rem;
+        }
+        .loading-text {
+            font-family: 'Cinzel', serif; color: #e8e8eb; font-size: 1.5rem;
+            letter-spacing: 8px; margin-top: 200px; animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse { 0% { opacity: 0.3; } 100% { opacity: 1; text-shadow: 0 0 15px #cc0000; } }
 
         /* === 华丽页边距 === */
         .page-border {
             position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px;
             border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999;
         }
-        .page-border::before, .page-border::after {
-            content: '✟'; position: absolute; color: rgba(201, 160, 99, 0.3); font-size: 1.5rem;
-        }
+        .page-border::before, .page-border::after { content: '✟'; position: absolute; color: rgba(201, 160, 99, 0.3); font-size: 1.5rem; }
         .page-border::before { top: -12px; left: -8px; }
         .page-border::after { bottom: -12px; right: -8px; }
 
@@ -59,298 +81,125 @@
         .corner-tr { top: -80px; right: -80px; --rot: 90deg; }
         .corner-bl { bottom: -80px; left: -80px; --rot: -90deg; }
         .corner-br { bottom: -80px; right: -80px; --rot: 180deg; }
-
-        @keyframes floatRose {
-            0% { opacity: 0.1; transform: scale(1) rotate(var(--rot, 0deg)); }
-            100% { opacity: 0.25; transform: scale(1.05) rotate(var(--rot, 0deg)); }
-        }
+        @keyframes floatRose { 0% { opacity: 0.1; transform: scale(1) rotate(var(--rot, 0deg)); } 100% { opacity: 0.25; transform: scale(1.05) rotate(var(--rot, 0deg)); } }
 
         /* === 纯红玫瑰风暴 === */
-        .petals-container {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 100; overflow: hidden;
-        }
-        .petal {
-            position: absolute;
-            border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%;
-            opacity: 0;
-            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4); /* 红晕发光 */
-            animation: fall linear infinite, sway ease-in-out infinite alternate;
-        }
-        
-        @keyframes fall {
-            0% { top: -10vh; opacity: 0; transform: scale(0.8); }
-            10% { opacity: 0.9; }
-            90% { opacity: 0.9; }
-            100% { top: 110vh; opacity: 0; transform: scale(1.2); }
-        }
-        @keyframes sway {
-            0% { transform: translateX(-50px) rotate(0deg); }
-            100% { transform: translateX(50px) rotate(360deg); }
-        }
+        .petals-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50; overflow: hidden; }
+        .petal { position: absolute; border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; opacity: 0; box-shadow: 0 0 15px rgba(204, 0, 0, 0.4); animation: fall linear infinite, sway ease-in-out infinite alternate; }
+        @keyframes fall { 0% { top: -10vh; opacity: 0; transform: scale(0.8); } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 110vh; opacity: 0; transform: scale(1.2); } }
+        @keyframes sway { 0% { transform: translateX(-50px) rotate(0deg); } 100% { transform: translateX(50px) rotate(360deg); } }
+
+        /* === 点击血滴特效 === */
+        .blood-ripple { position: fixed; width: 20px; height: 20px; background: radial-gradient(circle, rgba(204,0,0,0.8) 0%, rgba(139,0,0,0) 70%); border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); animation: bloodBurst 0.6s ease-out forwards; }
+        @keyframes bloodBurst { 0% { width: 0; height: 0; opacity: 1; } 100% { width: 100px; height: 100px; opacity: 0; } }
+
+        /* === 呼吸光晕 === */
+        @keyframes breathGlow { 0% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); } 50% { box-shadow: 0 0 25px rgba(204, 0, 0, 0.7); } 100% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); } }
+        .profile-card, .preview-card { animation: breathGlow 4s infinite ease-in-out; }
+
+        /* === 滚动渐入 === */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* =========================================
            第一屏：哥特时钟与玫瑰
            ========================================= */
-        .hero-section {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            position: relative; z-index: 1;
-        }
+        .hero-section { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 1; }
 
-        .gothic-clock {
-            position: absolute; width: 700px; height: 700px;
-            border-radius: 50%;
-            border: 2px solid rgba(201, 160, 99, 0.2);
-            box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.2), 0 0 60px rgba(0,0,0,0.9);
-            z-index: -1; display: flex; justify-content: center; align-items: center;
-        }
-        /* 华丽的外圈花边 */
-        .gothic-clock::before {
-            content: ''; position: absolute; width: 105%; height: 105%; border-radius: 50%;
-            background: repeating-conic-gradient(from 0deg, transparent 0deg 45deg, rgba(201, 160, 99, 0.08) 45deg 90deg);
-            z-index: -1;
-        }
-        /* 内部罗马数字刻度外框 */
-        .clock-face {
-            position: absolute; width: 85%; height: 85%;
-            background: repeating-conic-gradient(from 0deg, transparent 0deg 5.5deg, rgba(201, 160, 99, 0.1) 5.5deg 6deg);
-            border-radius: 50%; border: 1px solid rgba(201, 160, 99, 0.15);
-        }
+        .gothic-clock { position: absolute; width: 700px; height: 700px; border-radius: 50%; border: 2px solid rgba(201, 160, 99, 0.2); box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.2), 0 0 60px rgba(0,0,0,0.9); z-index: -1; display: flex; justify-content: center; align-items: center; }
+        .gothic-clock::before { content: ''; position: absolute; width: 105%; height: 105%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, transparent 0deg 45deg, rgba(201, 160, 99, 0.08) 45deg 90deg); z-index: -1; }
+        .clock-face { position: absolute; width: 85%; height: 85%; background: repeating-conic-gradient(from 0deg, transparent 0deg 5.5deg, rgba(201, 160, 99, 0.1) 5.5deg 6deg); border-radius: 50%; border: 1px solid rgba(201, 160, 99, 0.15); }
 
-        .roman-numeral {
-            position: absolute; color: rgba(201, 160, 99, 0.7);
-            font-family: 'Cinzel', serif; font-size: 2rem; font-weight: bold;
-            text-shadow: 0 0 15px rgba(201, 160, 99, 0.5);
-        }
-        .num-12 { top: 40px; }
-        .num-3 { right: 40px; }
-        .num-6 { bottom: 40px; }
-        .num-9 { left: 40px; }
+        .roman-numeral { position: absolute; color: rgba(201, 160, 99, 0.7); font-family: 'Cinzel', serif; font-size: 2rem; font-weight: bold; text-shadow: 0 0 15px rgba(201, 160, 99, 0.5); }
+        .num-12 { top: 40px; } .num-3 { right: 40px; } .num-6 { bottom: 40px; } .num-9 { left: 40px; }
 
-        /* 华丽指针：带剑柄形状 */
-        .clock-hand {
-            position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center;
-            background: linear-gradient(to top, transparent, var(--accent-gold));
-            clip-path: polygon(50% 0%, 100% 20%, 50% 100%, 0% 20%); /* 剑形 */
-            border-radius: 2px;
-        }
+        .clock-hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: linear-gradient(to top, transparent, var(--accent-gold)); clip-path: polygon(50% 0%, 100% 20%, 50% 100%, 0% 20%); border-radius: 2px; }
         .hour-hand { width: 12px; height: 180px; margin-left: -6px; animation: rotateHand 120s linear infinite; opacity: 0.6; }
         .minute-hand { width: 8px; height: 260px; margin-left: -4px; animation: rotateHand 30s linear infinite; opacity: 0.8; }
         @keyframes rotateHand { 100% { transform: rotate(360deg); } }
 
-        /* 中心宝石 */
-        .clock-center {
-            position: absolute; width: 30px; height: 30px;
-            background: radial-gradient(circle, #ff0000, #4a0000);
-            border-radius: 50%; box-shadow: 0 0 30px var(--accent-blood); z-index: 2;
-            border: 2px solid var(--accent-gold);
-        }
+        .clock-center { position: absolute; width: 30px; height: 30px; background: radial-gradient(circle, #ff0000, #4a0000); border-radius: 50%; box-shadow: 0 0 30px var(--accent-blood); z-index: 2; border: 2px solid var(--accent-gold); }
 
-        .rose-watermark {
-            position: absolute; width: 500px; height: 500px; z-index: -1;
-            opacity: 0.3; animation: slowPulse 8s infinite alternate;
-        }
-        @keyframes slowPulse {
-            0% { transform: scale(1); opacity: 0.2; filter: drop-shadow(0 0 15px var(--accent-crimson)); }
-            100% { transform: scale(1.05); opacity: 0.4; filter: drop-shadow(0 0 40px var(--accent-blood)); }
-        }
+        .rose-watermark { position: absolute; width: 500px; height: 500px; z-index: -1; opacity: 0.3; animation: slowPulse 8s infinite alternate; }
+        @keyframes slowPulse { 0% { transform: scale(1); opacity: 0.2; filter: drop-shadow(0 0 15px var(--accent-crimson)); } 100% { transform: scale(1.05); opacity: 0.4; filter: drop-shadow(0 0 40px var(--accent-blood)); } }
 
-        .hero-title {
-            font-family: 'Cinzel', serif; font-size: 5.5rem; font-weight: 900;
-            letter-spacing: 18px; text-transform: uppercase; margin-bottom: 30px;
-            background: linear-gradient(to right, #d1d1d6, #fff, var(--accent-gold), #fff, #d1d1d6);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 50px rgba(139, 0, 0, 0.5); /* 强烈的血光 */
-            animation: fadeIn 2s ease-out;
-        }
+        .hero-title { font-family: 'Cinzel', serif; font-size: 5.5rem; font-weight: 900; letter-spacing: 18px; text-transform: uppercase; margin-bottom: 30px; background: linear-gradient(to right, #d1d1d6, #fff, var(--accent-gold), #fff, #d1d1d6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 50px rgba(139, 0, 0, 0.5); animation: fadeIn 2s ease-out; }
 
-        .hero-divider {
-            display: flex; align-items: center; gap: 20px; margin-bottom: 30px;
-            animation: fadeIn 2.5s ease-out;
-        }
+        .hero-divider { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; animation: fadeIn 2.5s ease-out; }
         .divider-line { width: 180px; height: 3px; border-top: 1px solid #444; border-bottom: 1px solid #444; }
         .divider-diamond { width: 10px; height: 10px; border: 1px solid var(--accent-blood); transform: rotate(45deg); background: rgba(139,0,0,0.2); }
         .divider-icon { color: var(--accent-blood); font-size: 1.2rem; text-shadow: 0 0 10px var(--accent-blood); }
 
-        .hero-subtitle {
-            font-size: 1.1rem; color: var(--text-muted); letter-spacing: 15px; text-transform: uppercase;
-            animation: fadeIn 3s ease-out;
-        }
-
-        .scroll-down {
-            position: absolute; bottom: 40px; color: var(--text-muted); font-size: 1.5rem;
-            animation: bounce 2s infinite; cursor: pointer; transition: all 0.3s;
-        }
+        .hero-subtitle { font-size: 1.1rem; color: var(--text-muted); letter-spacing: 15px; text-transform: uppercase; min-height: 25px; }
+        .scroll-down { position: absolute; bottom: 40px; color: var(--text-muted); font-size: 1.5rem; animation: bounce 2s infinite; cursor: pointer; transition: all 0.3s; }
         .scroll-down:hover { color: var(--accent-blood); }
 
         /* =========================================
-           第二屏：奢华名片 (增加流光扫过)
+           第二屏：奢华名片
            ========================================= */
-        .author-section {
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            padding: 80px 20px; position: relative; z-index: 1;
-        }
+        .author-section { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 80px 20px; position: relative; z-index: 1; }
+        .card-wrapper { padding: 15px; border: 1px dashed rgba(201, 160, 99, 0.4); border-radius: 6px; max-width: 950px; width: 100%; position: relative; overflow: hidden; }
+        .card-wrapper::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.2), transparent); animation: sweepLight 4s infinite linear; pointer-events: none; }
+        @keyframes sweepLight { 0% { left: -100%; } 100% { left: 200%; } }
 
-        .card-wrapper {
-            padding: 15px; border: 1px dashed rgba(201, 160, 99, 0.4);
-            border-radius: 6px; max-width: 950px; width: 100%; position: relative;
-            overflow: hidden; /* 用于流光效果 */
-        }
+        .profile-card { background: var(--bg-card); backdrop-filter: blur(25px); border: 1px solid rgba(201, 160, 99, 0.6); border-radius: 2px; padding: 60px 50px; display: flex; gap: 60px; box-shadow: inset 0 0 80px rgba(139,0,0,0.2), 0 20px 50px rgba(0,0,0,0.95); position: relative; overflow: hidden; }
+        .profile-card::before { content: ''; position: absolute; bottom: -80px; right: -80px; width: 350px; height: 350px; background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 15 C65 30, 85 40, 85 60 C85 80, 65 90, 50 95 C35 90, 15 80, 15 60 C15 40, 35 30, 50 15 Z" fill="none" stroke="rgba(204,0,0,0.2)" stroke-width="2"/></svg>') no-repeat center; background-size: contain; z-index: 0; pointer-events: none; transform: rotate(-30deg); }
 
-        /* 卡片外圈流光 */
-        .card-wrapper::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.2), transparent);
-            animation: sweepLight 4s infinite linear; pointer-events: none;
-        }
-        @keyframes sweepLight {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        .profile-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(201, 160, 99, 0.6);
-            border-radius: 2px; padding: 60px 50px;
-            display: flex; gap: 60px;
-            box-shadow: inset 0 0 80px rgba(139,0,0,0.2), 0 20px 50px rgba(0,0,0,0.95);
-            position: relative; overflow: hidden;
-        }
-
-        /* 卡片背景玫瑰残影 */
-        .profile-card::before {
-            content: ''; position: absolute; bottom: -80px; right: -80px; width: 350px; height: 350px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 15 C65 30, 85 40, 85 60 C85 80, 65 90, 50 95 C35 90, 15 80, 15 60 C15 40, 35 30, 50 15 Z" fill="none" stroke="rgba(204,0,0,0.2)" stroke-width="2"/></svg>') no-repeat center;
-            background-size: contain; z-index: 0; pointer-events: none; transform: rotate(-30deg);
-        }
-
-        .corner-deco {
-            position: absolute; width: 60px; height: 60px; border: 1px solid var(--accent-gold); pointer-events: none; z-index: 2;
-        }
+        .corner-deco { position: absolute; width: 60px; height: 60px; border: 1px solid var(--accent-gold); pointer-events: none; z-index: 2; }
         .top-left { top: 8px; left: 8px; border-right: none; border-bottom: none; }
         .top-right { top: 8px; right: 8px; border-left: none; border-bottom: none; }
         .bottom-left { bottom: 8px; left: 8px; border-right: none; border-top: none; }
         .bottom-right { bottom: 8px; right: 8px; border-left: none; border-top: none; }
 
         .profile-left { flex-shrink: 0; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-
-        .avatar-container {
-            width: 180px; height: 180px; border-radius: 50%; padding: 4px;
-            border: 1px solid #444; position: relative; margin-bottom: 25px;
-            box-shadow: 0 0 50px rgba(139,0,0,0.5); /* 头像外发光 */
-        }
-        .avatar-container::before {
-            content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
-            border-radius: 50%; border: 1px dashed rgba(204, 0, 0, 0.6); animation: rotateHand 40s linear infinite;
-        }
-        .avatar-container::after {
-            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
-            border-radius: 50%; border: 2px solid var(--accent-gold); pointer-events: none;
-        }
+        .avatar-container { width: 180px; height: 180px; border-radius: 50%; padding: 4px; border: 1px solid #444; position: relative; margin-bottom: 25px; box-shadow: 0 0 50px rgba(139,0,0,0.5); }
+        .avatar-container::before { content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 1px dashed rgba(204, 0, 0, 0.6); animation: rotateHand 40s linear infinite; }
+        .avatar-container::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border-radius: 50%; border: 2px solid var(--accent-gold); pointer-events: none; }
         .avatar-container img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #000; }
 
         .author-name { font-family: 'Cinzel', serif; font-size: 2.2rem; color: var(--text-main); letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
         .author-tag { font-size: 0.85rem; color: var(--accent-blood); letter-spacing: 2px; text-transform: uppercase; }
 
         .profile-right { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; }
-
-        .section-heading {
-            font-size: 1.3rem; color: var(--text-main); margin-bottom: 25px;
-            display: flex; align-items: center; gap: 20px; letter-spacing: 3px; font-weight: 600;
-        }
-        .section-heading::before, .section-heading::after {
-            content: ''; flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-blood), transparent);
-        }
-
+        .section-heading { font-size: 1.3rem; color: var(--text-main); margin-bottom: 25px; display: flex; align-items: center; gap: 20px; letter-spacing: 3px; font-weight: 600; }
+        .section-heading::before, .section-heading::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-blood), transparent); }
         .author-bio { font-size: 1.05rem; color: var(--text-muted); line-height: 2.2; text-align: justify; margin-bottom: 35px; }
-        .author-bio::first-letter {
-            font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--accent-gold);
-            float: left; line-height: 0.8; margin-right: 10px; margin-top: 5px;
-        }
+        .author-bio::first-letter { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--accent-gold); float: left; line-height: 0.8; margin-right: 10px; margin-top: 5px; }
 
-        .stats-board {
-            display: flex; gap: 40px; margin-bottom: 35px;
-            padding: 20px 0; border-top: 1px solid #333; border-bottom: 1px solid #333;
-        }
+        .stats-board { display: flex; gap: 40px; margin-bottom: 35px; padding: 20px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .stat-item h4 { color: var(--accent-gold); font-size: 1.6rem; font-family: 'Cinzel', serif; margin-bottom: 5px; }
         .stat-item p { color: var(--text-muted); font-size: 0.8rem; letter-spacing: 2px; }
 
         .social-links { display: flex; gap: 15px; flex-wrap: wrap; }
-        .social-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 25px; background: transparent; color: var(--text-main);
-            text-decoration: none; border: 1px solid #444; transition: all 0.4s; font-size: 0.9rem;
-        }
-        .social-btn:hover {
-            border-color: var(--accent-blood); color: #fff;
-            box-shadow: inset 0 0 15px rgba(204, 0, 0, 0.2), 0 0 20px rgba(204, 0, 0, 0.3);
-        }
+        .social-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 25px; background: transparent; color: var(--text-main); text-decoration: none; border: 1px solid #444; transition: all 0.4s; font-size: 0.9rem; }
+        .social-btn:hover { border-color: var(--accent-blood); color: #fff; box-shadow: inset 0 0 15px rgba(204, 0, 0, 0.2), 0 0 20px rgba(204, 0, 0, 0.3); }
 
         /* =========================================
            第三屏：画廊
            ========================================= */
-        .oc-preview-section {
-            padding: 80px 5% 100px; text-align: center;
-            background: radial-gradient(circle at center bottom, rgba(139,0,0,0.1), transparent);
-            position: relative; z-index: 1;
-        }
-
-        .big-title {
-            font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--text-main);
-            margin-bottom: 60px; letter-spacing: 10px;
-            display: flex; align-items: center; justify-content: center; gap: 25px;
-            text-shadow: 0 0 20px rgba(139,0,0,0.6);
-        }
-        .big-title::before, .big-title::after {
-            content: ''; width: 120px; height: 2px; border-top: 1px solid var(--accent-blood); border-bottom: 1px solid var(--accent-blood);
-        }
+        .oc-preview-section { padding: 80px 5% 100px; text-align: center; background: radial-gradient(circle at center bottom, rgba(139,0,0,0.1), transparent); position: relative; z-index: 1; }
+        .big-title { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--text-main); margin-bottom: 60px; letter-spacing: 10px; display: flex; align-items: center; justify-content: center; gap: 25px; text-shadow: 0 0 20px rgba(139,0,0,0.6); }
+        .big-title::before, .big-title::after { content: ''; width: 120px; height: 2px; border-top: 1px solid var(--accent-blood); border-bottom: 1px solid var(--accent-blood); }
 
         .preview-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 70px; }
-
-        .preview-card {
-            width: 260px; height: 380px; background: #000; 
-            border: 1px solid var(--accent-gold); padding: 10px;
-            position: relative; transition: all 0.5s; cursor: pointer;
-            box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
-        }
+        .preview-card { width: 260px; height: 380px; background: #000; border: 1px solid var(--accent-gold); padding: 10px; position: relative; transition: all 0.5s; cursor: pointer; box-shadow: 0 0 20px rgba(139, 0, 0, 0.2); }
         .preview-card-inner { width: 100%; height: 100%; border: 1px solid #333; position: relative; overflow: hidden; }
         .preview-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 50px rgba(204, 0, 0, 0.5), 0 0 30px rgba(201, 160, 99, 0.3); border-color: var(--accent-blood); }
-
-        /* 双层金框 */
-        .preview-card::after {
-            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
-            border: 1px solid rgba(201, 160, 99, 0.4); pointer-events: none;
-        }
-
-        .preview-img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.5;
-            filter: grayscale(100%) contrast(1.2); transition: all 0.6s;
-        }
+        .preview-card::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border: 1px solid rgba(201, 160, 99, 0.4); pointer-events: none; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; filter: grayscale(100%) contrast(1.2); transition: all 0.6s; }
         .preview-card:hover .preview-img { opacity: 1; filter: grayscale(0%) contrast(1); transform: scale(1.1); }
+        .preview-text { position: absolute; bottom: 30px; left: 0; width: 100%; color: #fff; font-family: 'Cinzel', serif; font-size: 1.2rem; letter-spacing: 3px; text-shadow: 0 0 10px #000, 0 0 20px var(--accent-blood); }
 
-        .preview-text {
-            position: absolute; bottom: 30px; left: 0; width: 100%;
-            color: #fff; font-family: 'Cinzel', serif; font-size: 1.2rem;
-            letter-spacing: 3px; text-shadow: 0 0 10px #000, 0 0 20px var(--accent-blood);
-        }
-
-        .btn-epic {
-            display: inline-block; padding: 20px 70px;
-            font-family: 'Noto Serif SC', serif; font-size: 1.2rem;
-            color: var(--accent-gold); background: rgba(0,0,0,0.5);
-            text-decoration: none; font-weight: 600; letter-spacing: 6px;
-            border: 1px solid var(--accent-gold); position: relative; overflow: hidden; z-index: 1;
-            transition: all 0.4s; box-shadow: 0 0 20px rgba(201, 160, 99, 0.1);
-        }
-        .btn-epic::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.4), transparent);
-            transition: all 0.5s ease; z-index: -1;
-        }
+        .btn-epic { display: inline-block; padding: 20px 70px; font-family: 'Noto Serif SC', serif; font-size: 1.2rem; color: var(--accent-gold); background: rgba(0,0,0,0.5); text-decoration: none; font-weight: 600; letter-spacing: 6px; border: 1px solid var(--accent-gold); position: relative; overflow: hidden; z-index: 1; transition: all 0.4s; box-shadow: 0 0 20px rgba(201, 160, 99, 0.1); }
+        .btn-epic::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.4), transparent); transition: all 0.5s ease; z-index: -1; }
         .btn-epic:hover::before { left: 100%; }
         .btn-epic:hover { box-shadow: 0 0 50px rgba(204, 0, 0, 0.5); border-color: var(--accent-blood); color: #fff; }
+
+        /* 音乐按钮 */
+        #music-btn { position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; border-radius: 50%; background: rgba(8, 8, 10, 0.9); border: 1px solid #c9a063; color: #c9a063; font-size: 1.2rem; cursor: pointer; z-index: 9999; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; }
+        #music-btn:hover { background: #8b0000; color: #fff; }
+        #music-btn.playing i { animation: spin 3s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
@@ -365,13 +214,39 @@
             .stats-board { flex-wrap: wrap; justify-content: center; }
             .author-bio::first-letter { font-size: 2.5rem; }
             .corner-rose { width: 200px; height: 200px; opacity: 0.1; }
-      
+        }
+
+        /* =========================================
+           满级神装特效包样式 (时钟转场/右键/3D)
+           ========================================= */
+        #page-transition { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #030304; z-index: 99999999; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; display: flex; justify-content: center; align-items: center; }
+        #page-transition.active { opacity: 1; pointer-events: all; }
+        .gothic-clock-loader { width: 100px; height: 100px; border: 2px solid #c9a063; border-radius: 50%; position: relative; box-shadow: 0 0 30px rgba(139, 0, 0, 0.5); opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #page-transition.active .gothic-clock-loader { opacity: 1; transform: scale(1); }
+        .gothic-clock-loader::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border-radius: 50%; border: 1px dashed #8b0000; animation: spin 4s linear infinite; }
+        .clock-hand-loader { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #c9a063; border-radius: 4px; }
+        .hand-hour { width: 4px; height: 25px; margin-left: -2px; animation: spin 3s linear infinite; }
+        .hand-minute { width: 2px; height: 35px; margin-left: -1px; animation: spin 1s linear infinite; }
+
+        #custom-context-menu { position: fixed; display: none; background: rgba(12, 12, 16, 0.95); border: 1px solid #c9a063; border-radius: 4px; z-index: 99999999; box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5); backdrop-filter: blur(10px); min-width: 150px; padding: 5px 0; }
+        #custom-context-menu div { padding: 10px 20px; color: #8a8a93; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: 'Noto Serif SC', serif; }
+        #custom-context-menu div:hover { background: rgba(139, 0, 0, 0.3); color: #c9a063; }
+
+        .card-3d-wrap { perspective: 1000px; }
+        .card-3d-inner { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
     </style>
 </head>
 <body>
 
+    <!-- 🎭 进站加载动画 -->
+    <div id="loading-screen">
+        <div class="magic-circle-loader"></div>
+        <h1 class="loading-text">Yueyismile</h1>
+    </div>
+
     <div class="page-border"></div>
 
+    <!-- 四角玫瑰图腾 -->
     <svg class="corner-rose corner-tl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 0 L100 0 L100 20 C80 20, 60 30, 50 50 C40 70, 20 80, 0 100 Z" fill="none" stroke="var(--accent-gold)" stroke-width="0.5"/>
         <path d="M50 50 C60 40, 70 30, 80 30 C90 30, 90 40, 80 50 C70 60, 60 70, 50 80 C40 70, 30 60, 20 60 C10 60, 10 50, 20 40 C30 30, 40 40, 50 50 Z" fill="none" stroke="var(--accent-blood)" stroke-width="1"/>
@@ -395,8 +270,25 @@
 
     <div class="petals-container" id="petals"></div>
 
+    <!-- 转场时钟结构 -->
+    <div id="page-transition">
+        <div class="gothic-clock-loader">
+            <div class="clock-hand-loader hand-hour"></div>
+            <div class="clock-hand-loader hand-minute"></div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div id="custom-context-menu">
+        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
+        <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
+        <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
+        <div onclick="window.location.href='timeline.html'"><i class="fas fa-hourglass-half"></i> 时间线</div>
+        <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
+        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
+    </div>
+
     <section class="hero-section" id="top">
-        
         <div class="gothic-clock">
             <div class="clock-face"></div>
             <div class="roman-numeral num-12">XII</div>
@@ -423,13 +315,13 @@
             <div class="divider-diamond"></div>
             <div class="divider-line"></div>
         </div>
-        <p class="hero-subtitle">yueyismile's Gallery</p>
+       <p class="hero-subtitle" id="typewriter"></p>
         <a href="#profile" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
     </section>
 
     <section class="author-section" id="profile">
         <div class="card-wrapper">
-            <div class="profile-card">
+            <div class="profile-card reveal">
                 <div class="corner-deco top-left"></div>
                 <div class="corner-deco top-right"></div>
                 <div class="corner-deco bottom-left"></div>
@@ -469,24 +361,24 @@
     </section>
 
     <section class="oc-preview-section" id="oc-portal">
-        <h2 class="big-title">封印的档案</h2>
+        <h2 class="big-title reveal">封印的档案</h2>
         
         <div class="preview-grid">
-            <div class="preview-card">
+            <div class="preview-card reveal">
                 <div class="preview-card-inner">
                     <img src="https://i2.hdslb.com/bfs/new_dyn/ec3794f8c300a7935af0f0acfac30605449174100.png" class="preview-img" alt="OC">
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
                     <div class="preview-text">？</div>
                 </div>
             </div>
-            <div class="preview-card">
+            <div class="preview-card reveal">
                 <div class="preview-card-inner">
                     <img src="https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png" class="preview-img" alt="OC">
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
                     <div class="preview-text">？</div>
                 </div>
             </div>
-            <div class="preview-card">
+            <div class="preview-card reveal">
                 <div class="preview-card-inner">
                     <img src="https://i2.hdslb.com/bfs/new_dyn/67bbbe2b6c2402cb88f4e1198589aa08449174100.jpg" class="preview-img" alt="OC">
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 2rem; font-weight: 900; color: rgba(255, 255, 255, 0.6); text-shadow: 0px 0px 10px black, 0px 0px 5px black; pointer-events: none; z-index: 9999; white-space: nowrap; letter-spacing: 4px;">月翼smile</div>
@@ -495,191 +387,191 @@
             </div>
         </div>
 
-        <a href="oc.html" class="btn-epic">进入 OC 档案馆</a>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 40px;">
+            <a href="oc.html" class="btn-epic">进入 OC 档案馆</a>
+            <a href="world.html" class="btn-epic" style="color: #cc0000; border-color: #cc0000;">翻阅世界观档案</a>
+            <a href="timeline.html" class="btn-epic" style="color: #d4af37; border-color: #d4af37;">回溯暗夜编年史（时间线）</a>
+        </div>
     </section>
 
-    <script>
-        const petalsContainer = document.getElementById('petals');
-        // 纯正血色花瓣：暗红、猩红、酒红、深红
-        const redColors = [
-            'radial-gradient(circle at 30% 30%, #ff1a1a, #4a0000)', // 鲜血亮红
-            'radial-gradient(circle at 30% 30%, #cc0000, #1a0000)', // 经典正红
-            'radial-gradient(circle at 30% 30%, #8b0000, #2a0000)', // 暗红
-            'radial-gradient(circle at 30% 30%, #660000, #0a0000)'  // 酒红极暗
-        ];
+    <!-- 音乐播放器 -->
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-btn" title="播放/暂停音乐">
+        <i class="fas fa-music"></i>
+    </button>
 
+    <!-- 底部版权声明 -->
+    <div style="text-align: center; color: #8a8a93; font-size: 0.85rem; padding: 30px 20px; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; line-height: 2;">
+        <p style="margin: 0;">
+            Music by 
+            <a href="https://pixabay.com/users/sutton-cinematic-54886804/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" target="_blank" style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">Sutton Marek</a> 
+            from 
+            <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" target="_blank" style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">Pixabay</a>
+        </p>
+    </div>
+
+    <!-- 核心 JS 逻辑 -->
+    <script>
+        // 1. 进站加载动画关闭
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                if (loader) loader.classList.add('hidden');
+            }, 1500);
+        });
+
+        // 2. 生成玫瑰花瓣
+        const petalsContainer = document.getElementById('petals');
+        const redColors = [
+            'radial-gradient(circle at 30% 30%, #ff1a1a, #4a0000)',
+            'radial-gradient(circle at 30% 30%, #cc0000, #1a0000)',
+            'radial-gradient(circle at 30% 30%, #8b0000, #2a0000)',
+            'radial-gradient(circle at 30% 30%, #660000, #0a0000)'
+        ];
         for (let i = 0; i < 150; i++) {
             const petal = document.createElement('div');
             petal.classList.add('petal');
-            
-            const size = Math.random() * 18 + 5; 
+            const size = Math.random() * 18 + 5;
             petal.style.width = `${size}px`;
             petal.style.height = `${size}px`;
             petal.style.left = `${Math.random() * 100}vw`;
             petal.style.background = redColors[Math.floor(Math.random() * redColors.length)];
-            
-            const fallDuration = Math.random() * 8 + 6; 
+            const fallDuration = Math.random() * 8 + 6;
             const swayDuration = Math.random() * 2 + 1.5;
             const delay = Math.random() * 15;
-            
             petal.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
             petal.style.animationDelay = `${delay}s, 0s`;
             petal.style.transform = `rotate(${Math.random() * 360}deg)`;
-
             petalsContainer.appendChild(petal);
         }
-    </script>
-    <!-- 🎵 无缝续播播放器 -->
-<audio id="bgm" loop>
-    <source src="bgm.mp3" type="audio/mpeg">
-</audio>
-<button id="music-btn" title="播放/暂停音乐">
-    <i class="fas fa-music"></i>
-</button>
 
-<style>
-    /* （样式保持不变） */
-    #music-btn {
-        position: fixed; bottom: 40px; right: 40px;
-        width: 50px; height: 50px; border-radius: 50%;
-        background: rgba(8, 8, 10, 0.9);
-        border: 1px solid #c9a063; color: #c9a063;
-        font-size: 1.2rem; cursor: pointer; z-index: 9999;
-        transition: all 0.3s ease;
-        box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
-        display: flex; justify-content: center; align-items: center;
-    }
-    #music-btn:hover { background: #8b0000; color: #fff; }
-    #music-btn.playing i { animation: spin 3s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
-
-<script>
-    const bgm = document.getElementById('bgm');
-    const musicBtn = document.getElementById('music-btn');
-
-    // 1. 恢复上次切页前的播放进度
-    const savedTime = sessionStorage.getItem('bgmTime');
-    if (savedTime) {
-        bgm.currentTime = parseFloat(savedTime);
-    }
-
-    // 2. 记录当前播放进度，存在浏览器里
-    bgm.addEventListener('timeupdate', () => {
-        sessionStorage.setItem('bgmTime', bgm.currentTime);
-    });
-
-    // 3. 尝试自动续播（如果上一个页面正在播）
-    const wasPlaying = sessionStorage.getItem('bgmPlaying') === 'true';
-    if (wasPlaying) {
-        bgm.play().then(() => {
-            musicBtn.classList.add('playing');
-            musicBtn.style.color = '#cc0000';
-        }).catch((e) => {
-            // 浏览器的安全限制会拦截自动播放，我们给个提示
-            console.log("浏览器拦截了自动播放，等待用户点击");
+        // 3. 首页打字机特效
+        window.addEventListener('DOMContentLoaded', () => {
+            const text = "Yueyismile's Gallery";
+            const typewriterEl = document.getElementById('typewriter');
+            if (typewriterEl) {
+                let i = 0;
+                function typeWriter() {
+                    if (i < text.length) {
+                        typewriterEl.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 150);
+                    }
+                }
+                setTimeout(typeWriter, 1500);
+            }
         });
-    }
 
-    // 4. 手动点击按钮
-    musicBtn.addEventListener('click', function(e) {
-        e.stopPropagation(); // 防止触发全屏点击事件
-        toggleMusic();
-    });
+        // 4. 滚动渐入动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const elementsToReveal = document.querySelectorAll('.profile-card, .preview-card, .big-title');
+            elementsToReveal.forEach(el => el.classList.add('reveal'));
 
-    // 5. 首次进入，点击网页任何地方都能开启音乐（突破浏览器限制的最佳办法）
-    let hasClicked = false;
-    document.addEventListener('click', function() {
-        if (!hasClicked && bgm.paused) {
-            hasClicked = true;
-            toggleMusic();
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+
+        // 5. 音乐无缝续播
+        const bgm = document.getElementById('bgm');
+        const musicBtn = document.getElementById('music-btn');
+        const savedTime = sessionStorage.getItem('bgmTime');
+        if (savedTime) { bgm.currentTime = parseFloat(savedTime); }
+        bgm.addEventListener('timeupdate', () => { sessionStorage.setItem('bgmTime', bgm.currentTime); });
+        const wasPlaying = sessionStorage.getItem('bgmPlaying') === 'true';
+        if (wasPlaying) {
+            bgm.play().then(() => { musicBtn.classList.add('playing'); musicBtn.style.color = '#cc0000'; }).catch((e) => {});
         }
-    });
-
-    function toggleMusic() {
-        if (bgm.paused) {
-            bgm.play();
-            sessionStorage.setItem('bgmPlaying', 'true'); // 记录正在播放
-            musicBtn.classList.add('playing');
-            musicBtn.style.color = '#cc0000';
-        } else {
-            bgm.pause();
-            sessionStorage.setItem('bgmPlaying', 'false'); // 记录已暂停
-            musicBtn.classList.remove('playing');
-            musicBtn.style.color = '#c9a063';
+        musicBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleMusic(); });
+        let hasClicked = false;
+        document.addEventListener('click', function() {
+            if (!hasClicked && bgm.paused) { hasClicked = true; toggleMusic(); }
+        });
+        function toggleMusic() {
+            if (bgm.paused) {
+                bgm.play();
+                sessionStorage.setItem('bgmPlaying', 'true');
+                musicBtn.classList.add('playing');
+                musicBtn.style.color = '#cc0000';
+            } else {
+                bgm.pause();
+                sessionStorage.setItem('bgmPlaying', 'false');
+                musicBtn.classList.remove('playing');
+                musicBtn.style.color = '#c9a063';
+            }
         }
-    }
-</script>
 
-<!-- 底部音乐版权声明 (已适配哥特风) -->
-<div style="text-align: center; color: #8a8a93; font-size: 0.85rem; padding: 30px 20px; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; line-height: 2;">
-    <p style="margin: 0;">
-        Music by 
-        <a href="https://pixabay.com/users/sutton-cinematic-54886804/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" 
-           target="_blank" 
-           style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">
-           Sutton Marek
-        </a> 
-        from 
-        <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=627232" 
-           target="_blank" 
-           style="color: #c9a063; text-decoration: none; border-bottom: 1px dashed #c9a063;">
-           Pixabay
-        </a>
-    </p>
-</div>
-<!-- 🥀 全站玫瑰花瓣雨一键安装包 -->
-<script>
-    // 自动创建花瓣容器
-    const petalBox = document.createElement('div');
-    petalBox.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:50; overflow:hidden;";
-    document.body.appendChild(petalBox);
+        // 6. 全站满级神装特效 (转场/右键/3D/音效)
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                    e.preventDefault();
+                    document.getElementById('page-transition').classList.add('active');
+                    setTimeout(() => { window.location.href = href; }, 800);
+                }
+            });
+        });
 
-    // 自动生成动态样式
-    const petalStyle = document.createElement('style');
-    petalStyle.innerHTML = `
-        @keyframes fall {
-            0% { top: -10vh; opacity: 0; transform: scale(0.8); }
-            10% { opacity: 0.9; }
-            90% { opacity: 0.9; }
-            100% { top: 110vh; opacity: 0; transform: scale(1.2); }
+        const contextMenu = document.getElementById('custom-context-menu');
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            contextMenu.style.display = 'block';
+            let x = e.clientX; let y = e.clientY;
+            if (x + 160 > window.innerWidth) x -= 160;
+            if (y + 200 > window.innerHeight) y -= 200;
+            contextMenu.style.left = x + 'px'; contextMenu.style.top = y + 'px';
+        });
+        document.addEventListener('click', function() { contextMenu.style.display = 'none'; });
+
+        document.addEventListener('mousemove', function(e) {
+            const card = e.target.closest('.preview-card, .oc-card, .faction-card, .relation-card, .gallery-img-box');
+            if (card) {
+                card.classList.add('card-3d-inner');
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+                card.style.transform = `translateY(-5px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                card.style.boxShadow = `0 15px 35px rgba(204, 0, 0, 0.4)`;
+            }
+        });
+
+        document.addEventListener('mouseout', function(e) {
+            const card = e.target.closest('.preview-card, .oc-card, .faction-card, .relation-card, .gallery-img-box');
+            if (card) {
+                card.style.transform = `translateY(0) rotateX(0) rotateY(0) scale(1)`;
+                card.style.boxShadow = ``;
+            }
+        });
+
+        let audioCtx;
+        function playClickSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
-        @keyframes sway {
-            0% { transform: translateX(-50px) rotate(0deg); }
-            100% { transform: translateX(50px) rotate(360deg); }
-        }
-    `;
-    document.head.appendChild(petalStyle);
-
-    // 自动生成150片血色花瓣
-    const colors = [
-        'radial-gradient(circle at 30% 30%, #ff1a1a, #4a0000)',
-        'radial-gradient(circle at 30% 30%, #cc0000, #1a0000)',
-        'radial-gradient(circle at 30% 30%, #8b0000, #2a0000)',
-        'radial-gradient(circle at 30% 30%, #660000, #0a0000)'
-    ];
-    
-    for (let i = 0; i < 150; i++) {
-        const petal = document.createElement('div');
-        const size = Math.random() * 18 + 5; 
-        
-        // 直接把所有样式写在花瓣身上
-        petal.style.cssText = `
-            position: absolute; 
-            border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; 
-            opacity: 0; 
-            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
-            width: ${size}px; 
-            height: ${size}px; 
-            left: ${Math.random() * 100}vw; 
-            background: ${colors[Math.floor(Math.random() * colors.length)]}; 
-            animation: fall linear infinite, sway ease-in-out infinite alternate; 
-            animation-duration: ${Math.random() * 8 + 6}s, ${Math.random() * 2 + 1.5}s; 
-            animation-delay: ${Math.random() * 15}s, 0s; 
-            transform: rotate(${Math.random() * 360}deg);
-        `;
-        petalBox.appendChild(petal);
-    }
-</script>
+        document.addEventListener('click', playClickSound);
+    </script>
 </body>
 </html>

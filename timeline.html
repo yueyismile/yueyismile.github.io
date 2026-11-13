@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗夜纪事 | 时间线</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 基础颜色变量 */
+        :root {
+            --bg-dark: #040405; --bg-card: rgba(12, 12, 16, 0.85);
+            --text-main: #e8e8eb; --text-muted: #8a8a93;
+            --accent-gold: #c9a063; --accent-crimson: #8b0000; --accent-blood: #cc0000;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-dark); /* 强制黑底 */
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+            background-image: radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.15), transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* === 顶部导航 === */
+        .page-border { position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999; }
+        .nav-bar { display: flex; justify-content: center; gap: 30px; padding: 40px 0; position: relative; z-index: 10; }
+        .back-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; letter-spacing: 2px; transition: all 0.3s; }
+        .back-btn:hover { color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
+
+        .page-title { text-align: center; font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--text-main); letter-spacing: 10px; margin-bottom: 80px; text-shadow: 0 0 30px rgba(139, 0, 0, 0.6); }
+
+        /* === 华丽的时间轴 === */
+        .timeline { position: relative; max-width: 1000px; margin: 0 auto 100px; padding: 0 20px; }
+        
+        .timeline::after {
+            content: ''; position: absolute; width: 2px; background: linear-gradient(to bottom, transparent, var(--accent-gold), var(--accent-blood), transparent);
+            top: 0; bottom: 0; left: 50%; margin-left: -1px;
+        }
+
+        .container { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
+        .container.left { left: 0; text-align: right; }
+        .container.right { left: 50%; text-align: left; }
+
+        .container::after {
+            content: '✟'; position: absolute; width: 30px; height: 30px; right: -17px; top: 25px;
+            background-color: var(--bg-dark); border: 2px solid var(--accent-gold); border-radius: 50%;
+            z-index: 1; display: flex; justify-content: center; align-items: center;
+            color: var(--accent-blood); font-size: 1rem; box-shadow: 0 0 15px var(--accent-blood);
+        }
+        .container.right::after { left: -15px; }
+
+        .content {
+            padding: 25px 30px; background: var(--bg-card); position: relative; border-radius: 4px;
+            border: 1px solid rgba(201, 160, 99, 0.2); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); transition: all 0.4s;
+        }
+        .content:hover { border-color: var(--accent-blood); box-shadow: 0 0 30px rgba(139, 0, 0, 0.4); transform: translateY(-5px); }
+        
+        .container.left .content::before {
+            content: " "; position: absolute; top: 30px; right: -10px; border: 10px solid transparent;
+            border-left-color: rgba(201, 160, 99, 0.2); border-right: none;
+        }
+        .container.right .content::before {
+            content: " "; position: absolute; top: 30px; left: -10px; border: 10px solid transparent;
+            border-right-color: rgba(201, 160, 99, 0.2); border-left: none;
+        }
+
+        .content h3 { font-family: 'Cinzel', serif; color: var(--accent-gold); font-size: 1.5rem; margin-bottom: 10px; letter-spacing: 2px; }
+        .content p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; text-align: justify; }
+        .content .date { font-family: 'Cinzel', serif; color: var(--accent-blood); font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; display: block;}
+
+        /* 滚动渐入 */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .container { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .container.left, .container.right { left: 0; text-align: left; }
+            .container.left::after, .container.right::after { left: 16px; }
+            .container.left .content::before, .container.right .content::before {
+                left: -10px; border-right-color: rgba(201, 160, 99, 0.2); border-left: none;
+            }
+        }
+
+        /* === 满级神装样式 === */
+        /* 转场遮罩 */
+        #page-transition {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #030304; z-index: 9999999; pointer-events: none;
+            opacity: 0; transition: opacity 0.6s ease;
+            display: flex; justify-content: center; align-items: center;
+        }
+        #page-transition.active { opacity: 1; pointer-events: all; }
+        .gothic-clock-loader {
+            width: 100px; height: 100px; border: 2px solid #c9a063; border-radius: 50%;
+            position: relative; box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+            opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #page-transition.active .gothic-clock-loader { opacity: 1; transform: scale(1); }
+        .gothic-clock-loader::before {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-radius: 50%; border: 1px dashed #8b0000; animation: spin 4s linear infinite;
+        }
+        .clock-hand-loader { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #c9a063; border-radius: 4px; }
+        .hand-hour { width: 4px; height: 25px; margin-left: -2px; animation: spin 3s linear infinite; }
+        .hand-minute { width: 2px; height: 35px; margin-left: -1px; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* 右键菜单 */
+        #custom-context-menu {
+            position: fixed; display: none; background: rgba(12, 12, 16, 0.95);
+            border: 1px solid #c9a063; border-radius: 4px; z-index: 99999999;
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5); backdrop-filter: blur(10px);
+            min-width: 150px; padding: 5px 0;
+        }
+        #custom-context-menu div { padding: 10px 20px; color: #8a8a93; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        #custom-context-menu div:hover { background: rgba(139, 0, 0, 0.3); color: #c9a063; }
+
+        /* 音乐与回到顶部按钮 */
+        #music-btn, #back-to-top {
+            position: fixed; right: 40px; width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(8, 8, 10, 0.9); border: 1px solid #c9a063; color: #c9a063;
+            font-size: 1.2rem; cursor: pointer; z-index: 9999; transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+        }
+        #music-btn { bottom: 40px; }
+        #back-to-top { bottom: 110px; opacity: 0; pointer-events: none; border-style: dashed; }
+        #back-to-top.show { opacity: 1; pointer-events: all; }
+        #back-to-top:hover { background: var(--accent-crimson); color: #fff; border-style: solid; transform: rotate(360deg) scale(1.1); }
+        #music-btn:hover { background: #8b0000; color: #fff; }
+        #music-btn.playing i { animation: spin 3s linear infinite; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #040405; border-left: 1px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--accent-crimson), var(--accent-blood)); border-radius: 5px; border: 1px solid var(--accent-gold); }
+    </style>
+</head>
+<body>
+    <div class="page-border"></div>
+    
+    <!-- 转场时钟 -->
+    <div id="page-transition">
+        <div class="gothic-clock-loader">
+            <div class="clock-hand-loader hand-hour"></div>
+            <div class="clock-hand-loader hand-minute"></div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div id="custom-context-menu">
+        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
+        <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
+        <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
+        <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
+        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
+    </div>
+    
+    <!-- 导航 -->
+    <div class="nav-bar">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a>
+        <a href="world.html" class="back-btn">世界观档案</a>
+        <a href="oc.html" class="back-btn" style="color: var(--accent-gold);">OC 档案馆 <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <h1 class="page-title">暗 夜 编 年 史</h1>
+
+    <!-- 时间轴 -->
+    <div class="timeline">
+        <div class="container left reveal">
+            <div class="content">
+                <span class="date">纪元前 10 年</span>
+                <h3>Requiem 公司的诞生</h3>
+                <p>在暗夜的最深处，Requiem 公司拔地而起。他们的表面业务是生物科技，但实际上，他们正在秘密进行着代号为“019”的实验体计划……</p>
+            </div>
+        </div>
+
+        <div class="container right reveal">
+            <div class="content">
+                <span class="date">纪元前 3 年</span>
+                <h3>斯迈尔（微笑处刑者）觉醒</h3>
+                <p>“当我的胸口别上这朵暗红色的玫瑰时，我就已经不再是人类了。”作为公司最完美的处刑人，斯迈尔的微笑背后，隐藏着一段被彻底抹除的记忆。</p>
+            </div>
+        </div>
+
+        <div class="container left reveal">
+            <div class="content">
+                <span class="date">纪元元年</span>
+                <h3>罗斯伍德学院的相遇</h3>
+                <p>为掩盖真相，斯迈尔以“普通学生”的伪造身份潜入罗斯伍德学院。然而，在这里，她遇到了那个改变她命运的人，命运的齿轮开始转动……</p>
+            </div>
+        </div>
+        
+        <div class="container right reveal">
+            <div class="content">
+                <span class="date">纪元 2 年</span>
+                <h3>邪神残骸的暴走</h3>
+                <p>019 的力量开始失控，022 的阴暗面逐渐苏醒。Requiem 公司的高层试图介入，却引发了一场无法挽回的血案。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音乐与回顶 -->
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
+    <button id="back-to-top" title="回到顶部"><i class="fas fa-chevron-up"></i></button>
+
+    <script>
+        // 1. 滚动渐入
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+
+        // 2. 音乐播放
+        const bgm = document.getElementById('bgm');
+        const musicBtn = document.getElementById('music-btn');
+        const savedTime = sessionStorage.getItem('bgmTime');
+        if (savedTime) { bgm.currentTime = parseFloat(savedTime); }
+        bgm.addEventListener('timeupdate', () => { sessionStorage.setItem('bgmTime', bgm.currentTime); });
+        if (sessionStorage.getItem('bgmPlaying') === 'true') {
+            bgm.play().then(() => { musicBtn.classList.add('playing'); musicBtn.style.color = '#cc0000'; }).catch(()=>{});
+        }
+        musicBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleMusic(); });
+        let hasClicked = false;
+        document.addEventListener('click', function() {
+            if (!hasClicked && bgm.paused) { hasClicked = true; toggleMusic(); }
+        });
+        function toggleMusic() {
+            if (bgm.paused) {
+                bgm.play();
+                sessionStorage.setItem('bgmPlaying', 'true');
+                musicBtn.classList.add('playing');
+                musicBtn.style.color = '#cc0000';
+            } else {
+                bgm.pause();
+                sessionStorage.setItem('bgmPlaying', 'false');
+                musicBtn.classList.remove('playing');
+                musicBtn.style.color = '#c9a063';
+            }
+        }
+
+        // 3. 转场动画
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                    e.preventDefault();
+                    document.getElementById('page-transition').classList.add('active');
+                    setTimeout(() => { window.location.href = href; }, 800);
+                }
+            });
+        });
+
+        // 4. 右键菜单
+        const contextMenu = document.getElementById('custom-context-menu');
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            contextMenu.style.display = 'block';
+            let x = e.clientX; let y = e.clientY;
+            if (x + 160 > window.innerWidth) x -= 160;
+            if (y + 200 > window.innerHeight) y -= 200;
+            contextMenu.style.left = x + 'px'; contextMenu.style.top = y + 'px';
+        });
+        document.addEventListener('click', function() { contextMenu.style.display = 'none'; });
+
+        // 5. 回到顶部
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) { backToTopBtn.classList.add('show'); } 
+            else { backToTopBtn.classList.remove('show'); }
+        });
+        backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    </script>
+</body>
+</html>
