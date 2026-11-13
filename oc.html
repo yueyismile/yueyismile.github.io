@@ -14,12 +14,15 @@
             --text-main: #e8e8eb; --text-muted: #8a8a93;
             --accent-gold: #c9a063; --accent-crimson: #8b0000; --accent-blood: #cc0000;
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* 🛡️ 修复页面被撑破的问题 */
+        html, body { height: auto !important; min-height: 100vh; max-width: 100vw; overflow-x: hidden; }
 
         body {
             background-color: var(--bg-dark); color: var(--text-main);
-            font-family: 'Noto Serif SC', serif; overflow-x: hidden;
-            cursor: crosshair;
+            font-family: 'Noto Serif SC', serif; cursor: crosshair;
             background-image: 
                 url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 25 C60 35, 70 45, 50 65 C30 45, 40 35, 50 25 Z M50 65 C60 75, 70 85, 50 95 C30 85, 40 75, 50 65 Z M25 50 C35 60, 45 70, 50 65 C40 55, 35 45, 25 50 Z M75 50 C65 60, 55 70, 50 65 C60 55, 65 45, 75 50 Z" fill="none" stroke="rgba(201,160,99,0.04)" stroke-width="1"/></svg>'),
                 radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.2), transparent 60%);
@@ -33,19 +36,10 @@
         .back-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; letter-spacing: 2px; transition: all 0.3s; border-bottom: 1px solid transparent; }
         .back-btn:hover { color: var(--accent-blood); border-bottom-color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
 
-        /* 页面大标题（恢复横排舒适间距） */
-        .page-title {
-            text-align: center; font-family: 'Cinzel', serif; font-size: 3.5rem;
-            color: var(--text-main); letter-spacing: 8px; margin-bottom: 60px;
-            text-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
-        }
+        .page-title { text-align: center; font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--text-main); letter-spacing: 8px; margin-bottom: 60px; text-shadow: 0 0 30px rgba(139, 0, 0, 0.6); }
 
         /* 画廊网格 */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 50px; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
-            position: relative; z-index: 1;
-        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto 100px; padding: 0 5%; position: relative; z-index: 1; }
 
         /* 卡片外框 */
         .oc-card {
@@ -61,21 +55,10 @@
         .oc-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: grayscale(80%) contrast(1.2); transition: all 0.6s ease; }
         .oc-card:hover img { opacity: 1; filter: grayscale(0%) contrast(1); transform: scale(1.08); }
 
-        /* 卡片底部文字（强制横排，防挤压） */
-        .card-info {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; text-align: center;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 60%, transparent);
-            z-index: 2;
-        }
-        .card-name { 
-            font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--accent-gold); 
-            letter-spacing: 2px; margin-bottom: 8px; white-space: nowrap; /* 防止名字变成竖排 */
-            overflow: hidden; text-overflow: ellipsis;
-        }
-        .card-title { 
-            font-size: 0.85rem; color: var(--text-muted); letter-spacing: 1px; 
-            display: block; white-space: normal; /* 如果代号太长，允许正常换行，但不会变成竖排 */
-        }
+        /* 卡片底部文字 */
+        .card-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; text-align: center; background: linear-gradient(to top, rgba(0,0,0,0.95) 60%, transparent); z-index: 2; }
+        .card-name { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--accent-gold); letter-spacing: 2px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-title { font-size: 0.85rem; color: var(--text-muted); letter-spacing: 1px; display: block; white-space: normal; }
 
         /* === 弹窗基础 === */
         .modal-overlay {
@@ -91,21 +74,14 @@
             position: relative; overflow-y: auto; 
             box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.1), 0 0 50px rgba(0, 0, 0, 0.9);
             transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column;
-            animation: breathGlow 4s infinite ease-in-out;
+            display: flex; flex-direction: column; animation: breathGlow 4s infinite ease-in-out;
         }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
         .modal-content::-webkit-scrollbar { width: 8px; }
         .modal-content::-webkit-scrollbar-thumb { background: var(--accent-blood); border-radius: 4px; }
         .modal-content::-webkit-scrollbar-track { background: #000; }
 
-        .close-btn {
-            position: sticky; top: 20px; float: right; margin-right: 20px;
-            font-size: 1.5rem; color: #fff; cursor: pointer; z-index: 100;
-            background: rgba(139, 0, 0, 0.6); width: 45px; height: 45px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            transition: all 0.3s; border: 1px solid var(--accent-gold); backdrop-filter: blur(5px);
-        }
+        .close-btn { position: sticky; top: 20px; float: right; margin-right: 20px; font-size: 1.5rem; color: #fff; cursor: pointer; z-index: 100; background: rgba(139, 0, 0, 0.6); width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.3s; border: 1px solid var(--accent-gold); backdrop-filter: blur(5px); }
         .close-btn:hover { color: var(--accent-blood); background: #000; transform: rotate(90deg); }
 
         .modal-header { text-align: center; padding: 50px 20px 30px; border-bottom: 1px solid #222; background: radial-gradient(circle at top, rgba(139,0,0,0.2), transparent); }
@@ -137,30 +113,34 @@
         .gallery-img-box:hover::before { border-color: rgba(204, 0, 0, 0.5); }
         .gallery-img-box:hover img { filter: brightness(1.1); }
 
-        /* 音乐按钮 */
-        #music-btn {
-            position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; border-radius: 50%;
-            background: rgba(8, 8, 10, 0.9); border: 1px solid #c9a063; color: #c9a063;
-            font-size: 1.2rem; cursor: pointer; z-index: 9999; transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+        /* 🥀 补回的花瓣特效核心样式 */
+        .petals-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50; overflow: hidden; }
+        .petal { 
+            position: absolute; 
+            border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; 
+            opacity: 0; 
+            box-shadow: 0 0 15px rgba(204, 0, 0, 0.4); 
+            animation: fall linear infinite, sway ease-in-out infinite alternate; 
         }
-        #music-btn:hover { background: #8b0000; color: #fff; }
-        #music-btn.playing i { animation: spin 3s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fall { 
+            0% { top: -10vh; opacity: 0; transform: scale(0.8); } 
+            10% { opacity: 0.9; } 
+            90% { opacity: 0.9; } 
+            100% { top: 110vh; opacity: 0; transform: scale(1.2); } 
+        }
+        @keyframes sway { 
+            0% { transform: translateX(-20px) rotate(0deg); } 
+            100% { transform: translateX(20px) rotate(360deg); } 
+        }
 
         /* 特效动画 */
-        @keyframes breathGlow {
-            0% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(204, 0, 0, 0.7); }
-            100% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); }
+        @keyframes breathGlow { 0% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); } 50% { box-shadow: 0 0 25px rgba(204, 0, 0, 0.7); } 100% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.3); } }
+        
+        .blood-ripple { position: fixed; width: 20px; height: 20px; background: radial-gradient(circle, rgba(204,0,0,0.8) 0%, rgba(139,0,0,0) 70%); border-radius: 50%; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); animation: bloodBurst 0.6s ease-out forwards; }
+                @keyframes bigBloodBurst { 
+            0% { width: 10px; height: 10px; opacity: 1; border: 3px solid #ff0000; } 
+            100% { width: 250px; height: 250px; opacity: 0; border: 1px solid #8b0000; } 
         }
-        .blood-ripple {
-            position: fixed; width: 20px; height: 20px;
-            background: radial-gradient(circle, rgba(204,0,0,0.8) 0%, rgba(139,0,0,0) 70%);
-            border-radius: 50%; pointer-events: none; z-index: 999999;
-            transform: translate(-50%, -50%); animation: bloodBurst 0.6s ease-out forwards;
-        }
-        @keyframes bloodBurst { 0% { width: 0; height: 0; opacity: 1; } 100% { width: 100px; height: 100px; opacity: 0; } }
         
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -172,16 +152,63 @@
             .modal-gallery { padding: 30px 15px; }
             .page-title { font-size: 2.5rem; letter-spacing: 4px; }
         }
+
+        /* 👑 满级神装样式 */
+        #music-btn, #back-to-top { position: fixed; right: 40px; width: 50px; height: 50px; border-radius: 50%; background: rgba(8, 8, 10, 0.9); border: 1px solid #c9a063; color: #c9a063; font-size: 1.2rem; cursor: pointer; z-index: 9999; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; }
+        #music-btn { bottom: 40px; } #back-to-top { bottom: 110px; opacity: 0; pointer-events: none; border-style: dashed; }
+        #back-to-top.show { opacity: 1; pointer-events: all; }
+        #back-to-top:hover { background: var(--accent-crimson); color: #fff; border-style: solid; transform: rotate(360deg) scale(1.1); }
+        #music-btn:hover { background: #8b0000; color: #fff; }
+        #music-btn.playing i { animation: spin 3s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        #page-transition { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #030304; z-index: 99999999; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; display: flex; justify-content: center; align-items: center; }
+        #page-transition.active { opacity: 1; pointer-events: all; }
+        .gothic-clock-loader { width: 100px; height: 100px; border: 2px solid #c9a063; border-radius: 50%; position: relative; box-shadow: 0 0 30px rgba(139, 0, 0, 0.5); opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #page-transition.active .gothic-clock-loader { opacity: 1; transform: scale(1); }
+        .gothic-clock-loader::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border-radius: 50%; border: 1px dashed #8b0000; animation: spin 4s linear infinite; }
+        .clock-hand-loader { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #c9a063; border-radius: 4px; }
+        .hand-hour { width: 4px; height: 25px; margin-left: -2px; animation: spin 3s linear infinite; }
+        .hand-minute { width: 2px; height: 35px; margin-left: -1px; animation: spin 1s linear infinite; }
+
+        #custom-context-menu { position: fixed; display: none; background: rgba(12, 12, 16, 0.95); border: 1px solid #c9a063; border-radius: 4px; z-index: 99999999; box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5); backdrop-filter: blur(10px); min-width: 150px; padding: 5px 0; }
+        #custom-context-menu div { padding: 10px 20px; color: #8a8a93; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        #custom-context-menu div:hover { background: rgba(139, 0, 0, 0.3); color: #c9a063; }
+        .card-3d-inner { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
+        
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #040405; border-left: 1px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--accent-crimson), var(--accent-blood)); border-radius: 5px; border: 1px solid var(--accent-gold); }
     </style>
 </head>
 <body>
 
+    <!-- 转场时钟 -->
+    <div id="page-transition">
+        <div class="gothic-clock-loader">
+            <div class="clock-hand-loader hand-hour"></div>
+            <div class="clock-hand-loader hand-minute"></div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div id="custom-context-menu">
+        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
+        <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
+        <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
+        <div onclick="window.location.href='timeline.html'"><i class="fas fa-hourglass-half"></i> 时间线</div>
+        <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
+        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
+    </div>
+
     <div class="page-border"></div>
     <div class="nav-bar" style="display: flex; justify-content: center; gap: 30px;">
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a>
-    <a href="world.html" class="back-btn" style="color: var(--accent-gold);">世界观档案 <i class="fas fa-arrow-right"></i></a>
-    <a href="timeline.html" class="back-btn">时间线</a>
-</div>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a>
+        <a href="world.html" class="back-btn" style="color: var(--accent-gold);">世界观档案 <i class="fas fa-arrow-right"></i></a>
+        <a href="timeline.html" class="back-btn">时间线</a>
+    </div>
+
     <h1 class="page-title reveal">OC 档 案 馆</h1>
 
     <div class="gallery-grid">
@@ -196,7 +223,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc2 -->
         <div class="oc-card reveal" onclick="openModal('oc2')">
             <div class="oc-card-inner">
@@ -208,7 +234,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc3 -->
         <div class="oc-card reveal" onclick="openModal('oc3')">
             <div class="oc-card-inner">
@@ -220,7 +245,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc4 -->
         <div class="oc-card reveal" onclick="openModal('oc4')">
             <div class="oc-card-inner">
@@ -232,7 +256,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc5 -->
         <div class="oc-card reveal" onclick="openModal('oc5')">
             <div class="oc-card-inner">
@@ -244,7 +267,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc6 -->
         <div class="oc-card reveal" onclick="openModal('oc6')">
             <div class="oc-card-inner">
@@ -256,7 +278,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc7 -->
         <div class="oc-card reveal" onclick="openModal('oc7')">
             <div class="oc-card-inner">
@@ -268,7 +289,6 @@
                 </div>
             </div>
         </div>
-
         <!-- oc8 -->
         <div class="oc-card reveal" onclick="openModal('oc8')">
             <div class="oc-card-inner">
@@ -311,13 +331,12 @@
         </div>
     </div>
 
-    <!-- 音乐播放器 -->
+    <!-- 音乐播放器与回顶 -->
     <audio id="bgm" loop>
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
-    <button id="music-btn" title="播放/暂停音乐">
-        <i class="fas fa-music"></i>
-    </button>
+    <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
+    <button id="back-to-top" title="回到顶部"><i class="fas fa-chevron-up"></i></button>
 
     <!-- 花瓣容器 -->
     <div class="petals-container" id="petals"></div>
@@ -577,30 +596,6 @@
             }
         }
 
-        // 血滴与滚动特效
-        document.addEventListener('click', function(e) {
-            const ripple = document.createElement('div');
-            ripple.classList.add('blood-ripple');
-            ripple.style.left = e.clientX + 'px';
-            ripple.style.top = e.clientY + 'px';
-            document.body.appendChild(ripple);
-            setTimeout(() => { ripple.remove(); }, 600);
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const elementsToReveal = document.querySelectorAll('.oc-card, .big-title, .modal-content');
-            elementsToReveal.forEach(el => el.classList.add('reveal'));
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        });
-
         // 花瓣雨逻辑
         const petalsContainer = document.getElementById('petals');
         const redColors = [
@@ -622,148 +617,146 @@
             petal.style.transform = `rotate(${Math.random() * 360}deg)`;
             petalsContainer.appendChild(petal);
         }
-    </script>
-    <!-- 👑 全站满级神装 V2：时钟转场 + 右键菜单 + 全局图片3D视差 + 音效 -->
-<style>
-    /* 1. 时钟转场遮罩 */
-    #page-transition {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #030304; z-index: 9999999; pointer-events: none;
-        opacity: 0; transition: opacity 0.6s ease;
-        display: flex; justify-content: center; align-items: center;
-    }
-    #page-transition.active { opacity: 1; pointer-events: all; }
-    
-    /* 哥特时钟 */
-    .gothic-clock-loader {
-        width: 100px; height: 100px;
-        border: 2px solid #c9a063; border-radius: 50%;
-        position: relative; box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
-        opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    #page-transition.active .gothic-clock-loader { opacity: 1; transform: scale(1); }
-    
-    .gothic-clock-loader::before {
-        content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
-        border-radius: 50%; border: 1px dashed #8b0000;
-        animation: spin 4s linear infinite;
-    }
-    
-    /* 时钟指针 */
-    .clock-hand-loader {
-        position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center;
-        background: #c9a063; border-radius: 4px;
-    }
-    .hand-hour { width: 4px; height: 25px; margin-left: -2px; animation: spin 3s linear infinite; }
-    .hand-minute { width: 2px; height: 35px; margin-left: -1px; animation: spin 1s linear infinite; }
-    
-    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    /* 2. 自定义右键菜单 */
-    #custom-context-menu {
-        position: fixed; display: none; background: rgba(12, 12, 16, 0.95);
-        border: 1px solid #c9a063; border-radius: 4px; z-index: 99999999;
-        box-shadow: 0 5px 20px rgba(139, 0, 0, 0.5); backdrop-filter: blur(10px);
-        min-width: 150px; padding: 5px 0;
-    }
-    #custom-context-menu div {
-        padding: 10px 20px; color: #8a8a93; cursor: pointer; font-size: 0.9rem;
-        transition: all 0.2s; font-family: 'Noto Serif SC', serif;
-    }
-    #custom-context-menu div:hover { background: rgba(139, 0, 0, 0.3); color: #c9a063; }
-    
-    /* 3. 3D卡片基础类 */
-    .card-3d-wrap { perspective: 1000px; }
-    .card-3d-inner { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
-</style>
+        // 滚动渐入
+        document.addEventListener('DOMContentLoaded', function() {
+            const elementsToReveal = document.querySelectorAll('.oc-card, .page-title');
+            elementsToReveal.forEach(el => el.classList.add('reveal'));
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
 
-<!-- 转场时钟结构 -->
-<div id="page-transition">
-    <div class="gothic-clock-loader">
-        <div class="clock-hand-loader hand-hour"></div>
-        <div class="clock-hand-loader hand-minute"></div>
-    </div>
-</div>
-
-<div id="custom-context-menu">
-    <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
-    <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
-    <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
-    <div onclick="window.location.href='timeline.html'"><i class="fas fa-hourglass-half"></i> 时间线</div>
-    <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
-    <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
-</div>
-
-<script>
-    // 1. 转场动画（时钟）
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href && !href.startsWith('http') && !href.startsWith('#')) {
-                e.preventDefault();
-                document.getElementById('page-transition').classList.add('active');
-                setTimeout(() => { window.location.href = href; }, 800); // 时钟停留0.8秒
+                // === 满级特效集合（夸张版） ===
+        // 1. 点击血滴爆炸特效（多环扩散）
+        document.addEventListener('click', function(e) {
+            for(let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const ripple = document.createElement('div');
+                    ripple.style.cssText = `
+                        position: fixed; left: ${e.clientX}px; top: ${e.clientY}px;
+                        width: 10px; height: 10px;
+                        background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(139,0,0,0) 80%);
+                        border-radius: 50%; pointer-events: none; z-index: 9999999;
+                        transform: translate(-50%, -50%);
+                        animation: bigBloodBurst 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+                    `;
+                    document.body.appendChild(ripple);
+                    setTimeout(() => { ripple.remove(); }, 800);
+                }, i * 100); // 每隔0.1秒炸开一圈
             }
         });
-    });
 
-    // 2. 自定义右键菜单
-    const contextMenu = document.getElementById('custom-context-menu');
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        contextMenu.style.display = 'block';
-        let x = e.clientX; let y = e.clientY;
-        if (x + 160 > window.innerWidth) x -= 160;
-        if (y + 200 > window.innerHeight) y -= 200;
-        contextMenu.style.left = x + 'px'; contextMenu.style.top = y + 'px';
-    });
-    document.addEventListener('click', function() { contextMenu.style.display = 'none'; });
+        // 2. 鼠标暗夜流光拖尾（更密、更大、带光晕）
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() > 0.8) return; // 生成概率提高到 80%
+            const trail = document.createElement('div');
+            const colors = ['rgba(255, 0, 0, 0.8)', 'rgba(212, 175, 55, 0.8)', 'rgba(106, 27, 154, 0.8)']; // 血红、暗金、幽紫
+            const size = Math.random() * 15 + 5; // 尺寸变大为 5~20px
+            trail.style.cssText = `
+                position: fixed; top: ${e.clientY}px; left: ${e.clientX}px;
+                width: ${size}px; height: ${size}px; 
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                border-radius: 50%; pointer-events: none; z-index: 999999;
+                box-shadow: 0 0 15px currentColor; 
+                transform: translate(-50%, -50%);
+                transition: all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+            `;
+            document.body.appendChild(trail);
+            requestAnimationFrame(() => {
+                trail.style.transform = `translate(-50%, -50%) scale(0) translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`;
+                trail.style.opacity = '0';
+            });
+            setTimeout(() => { trail.remove(); }, 1200);
+        });
 
-    // 3. 全局图片 3D 视差倾斜（使用事件委托，完美覆盖动态生成的画廊）
-    document.addEventListener('mousemove', function(e) {
-        // 匹配所有需要 3D 效果的卡片和图片容器
-        const card = e.target.closest('.preview-card, .oc-card, .faction-card, .relation-card, .gallery-img-box');
-        if (card) {
-            card.classList.add('card-3d-inner'); // 动态添加过渡类
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -8; // 倾斜幅度稍微调小，不影响阅读
-            const rotateY = ((x - centerX) / centerX) * 8;
-            // 保留原本的 hover 效果，叠加 3D 倾斜
-            card.style.transform = `translateY(-5px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-            card.style.boxShadow = `0 15px 35px rgba(204, 0, 0, 0.4)`; // 增强阴影
+        // 3. 时钟转场
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                    e.preventDefault();
+                    document.getElementById('page-transition').classList.add('active');
+                    setTimeout(() => { window.location.href = href; }, 800);
+                }
+            });
+        });
+
+        // 4. 右键菜单
+        const contextMenu = document.getElementById('custom-context-menu');
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            contextMenu.style.display = 'block';
+            let x = e.clientX; let y = e.clientY;
+            if (x + 160 > window.innerWidth) x -= 160;
+            if (y + 200 > window.innerHeight) y -= 200;
+            contextMenu.style.left = x + 'px'; contextMenu.style.top = y + 'px';
+        });
+        document.addEventListener('click', function() { contextMenu.style.display = 'none'; });
+
+        // 5. 3D 卡片倾斜
+        document.addEventListener('mousemove', function(e) {
+            const card = e.target.closest('.oc-card, .gallery-img-box');
+            if (card) {
+                card.classList.add('card-3d-inner');
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+                card.style.transform = `translateY(-5px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                card.style.boxShadow = `0 15px 35px rgba(204, 0, 0, 0.4)`;
+            }
+        });
+
+        document.addEventListener('mouseout', function(e) {
+            const card = e.target.closest('.oc-card, .gallery-img-box');
+            if (card) {
+                card.style.transform = `translateY(0) rotateX(0) rotateY(0) scale(1)`;
+                card.style.boxShadow = ``;
+            }
+        });
+
+        // 6. 点击音效
+                // 6. 点击音效（清脆响亮的魔法音）
+        let audioCtx;
+        function playClickSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            // 改用三角波，频率从高频跌落到低频，类似“叮”的一声
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+            
+            // 音量从 0.05 提高到 0.3，这下绝对听得见！
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
         }
-    });
+        // 加上防重复绑定，直接挂载到点击事件
+        document.addEventListener('click', playClickSound);
 
-    // 鼠标移出时恢复原位（事件委托）
-    document.addEventListener('mouseout', function(e) {
-        const card = e.target.closest('.preview-card, .oc-card, .faction-card, .relation-card, .gallery-img-box');
-        if (card) {
-            card.style.transform = `translateY(0) rotateX(0) rotateY(0) scale(1)`;
-            card.style.boxShadow = ``; // 清空内联阴影，恢复 CSS 默认
-        }
-    });
-
-    // 4. 交互音效
-    let audioCtx;
-    function playClickSound() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        osc.type = 'sine'; // 换成稍微清脆一点的波形
-        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-    }
-    document.addEventListener('click', playClickSound);
-</script>
+        // 7. 回到顶部
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) { backToTopBtn.classList.add('show'); } 
+            else { backToTopBtn.classList.remove('show'); }
+        });
+        backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    </script>
 </body>
 </html>
