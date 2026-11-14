@@ -14,6 +14,12 @@
             --text-main: #e8e8eb; --text-muted: #8a8a93;
             --accent-gold: #c9a063; --accent-crimson: #8b0000; --accent-blood: #cc0000;
         }
+                /* 🛡️ 图片防拖拽/防选中/防手机长按保存护盾 */
+        img {
+            -webkit-user-drag: none; /* 禁止电脑端鼠标拖拽图片 */
+            user-select: none;       /* 禁止鼠标选中图片 */
+            -webkit-touch-callout: none; /* 禁止手机端长按弹出保存菜单 */
+        }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -194,12 +200,12 @@
 
     <!-- 右键菜单 -->
     <div id="custom-context-menu">
-        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回圣殿</div>
+        <div onclick="window.location.href='index.html'"><i class="fas fa-home"></i> 返回主页</div>
         <div onclick="window.location.href='oc.html'"><i class="fas fa-book"></i> 档案馆</div>
         <div onclick="window.location.href='world.html'"><i class="fas fa-globe"></i> 世界观</div>
         <div onclick="window.location.href='timeline.html'"><i class="fas fa-hourglass-half"></i> 时间线</div>
         <div style="border-top: 1px solid #333; margin: 5px 0;"></div>
-        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 画作受暗夜法则保护</div>
+        <div style="color: #cc0000; cursor: default;"><i class="fas fa-shield-alt"></i> 感谢浏览！</div>
     </div>
 
     <div class="page-border"></div>
@@ -520,9 +526,11 @@
                 },
                 story: "？？？",
                 gallery: [
+                    "https://i2.hdslb.com/bfs/new_dyn/a801ca39e9322131007557746472e60c449174100.jpg",
                     "https://i2.hdslb.com/bfs/new_dyn/1527416d32ec90cb0da467d4ede1f6eb449174100.jpg",
                     "https://i2.hdslb.com/bfs/new_dyn/e26bb512e9cbfc7d6bbc4716b8cce4aa449174100.jpg",
                     "https://i2.hdslb.com/bfs/new_dyn/d5879206debd79074f849198abc5d4c3449174100.jpg",
+                    
                     "https://i2.hdslb.com/bfs/new_dyn/a801ca39e9322131007557746472e60c449174100.jpg",
                     "https://i2.hdslb.com/bfs/new_dyn/5c2de54969c9fcea54c5dff1c132b503449174100.jpg"
                 ]

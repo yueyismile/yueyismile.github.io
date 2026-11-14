@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗夜广播 | 影像圣殿</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg-dark: #030304; --text-main: #e8e8eb; --text-muted: #8a8a93; --accent-blue: #00a1d6; --accent-gold: #c9a063; --accent-blood: #cc0000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-dark); color: var(--text-main);
+            font-family: 'Noto Serif SC', serif; overflow-x: hidden; cursor: crosshair;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 161, 214, 0.15), transparent 60%);
+            background-attachment: fixed; min-height: 100vh;
+        }
+        .page-border { position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999; }
+        .nav-bar { display: flex; justify-content: center; padding: 40px 0; position: relative; z-index: 10; }
+        .back-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; letter-spacing: 2px; transition: all 0.3s; }
+        .back-btn:hover { color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
+        .page-title { text-align: center; font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--text-main); letter-spacing: 10px; margin-bottom: 20px; text-shadow: 0 0 30px rgba(0, 161, 214, 0.4); }
+        .page-subtitle { text-align: center; color: var(--text-muted); letter-spacing: 5px; margin-bottom: 60px; }
+        .player-container { max-width: 1200px; margin: 0 auto 50px; padding: 0 5%; }
+        .player-frame {
+            background: rgba(10, 10, 14, 0.9);
+            border: 1px solid var(--accent-blue);
+            box-shadow: 0 0 50px rgba(0, 161, 214, 0.2), inset 0 0 50px rgba(0,0,0,0.8);
+            border-radius: 8px; padding: 15px; position: relative; margin-bottom: 60px;
+        }
+        .player-title { text-align: center; color: var(--accent-gold); font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 15px; letter-spacing: 3px; }
+        .player-frame iframe { width: 100%; height: 650px; border: none; border-radius: 4px; display: block; background: #000; }
+        .copyright { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 30px; border-top: 1px solid rgba(201, 160, 99, 0.1); }
+        @media (max-width: 768px) { .page-title { font-size: 2.5rem; } .player-frame iframe { height: 300px; } }
+    </style>
+</head>
+<body>
+
+    <div class="page-border"></div>
+    
+    <div class="nav-bar">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回暗夜圣殿</a>
+    </div>
+
+    <h1 class="page-title">暗 夜 广 播</h1>
+    <p class="page-subtitle">✟ 记录在 B 站的所有影像档案 ✟</p>
+
+    <div class="player-container">
+        
+        <!-- ======= 合集一：oc视频 ======= -->
+        <div class="player-title">✟ 合集一：oc视频 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117568002198445&bvid=BV1LA4i6wE7Y&cid=43373497120&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+        <!-- ======= 合集二：建模作品 ======= -->
+        <div class="player-title">✟ 合集二：建模作品 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117586977097401&bvid=BV18BW86wEY5&cid=43468392144&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+        <!-- ======= 合集三：绘画作品 ======= -->
+        <div class="player-title">✟ 合集三：绘画作品 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117436401583711&bvid=BV18GpC6YEmP&cid=42722330674&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+        <!-- ======= 合集四：同人作品 ======= -->
+        <div class="player-title">✟ 合集四：同人作品 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117549865961993&bvid=BV16B4K6RE6r&cid=43279388515&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+        <!-- ======= 合集五：MMD作品 ======= -->
+        <div class="player-title">✟ 合集五：MMD作品 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117336929602943&bvid=BV1wLhR66Etp&cid=42219930378&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+        <!-- ======= 合集六：其他作品 ======= -->
+        <div class="player-title">✟ 合集六：其他作品 ✟</div>
+        <div class="player-frame">
+            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=117121711344739&bvid=BV1WH8n6CEJ5&cid=41064467242&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        </div>
+
+    </div>
+
+    <div class="copyright">
+        © 月翼smile. 影像档案由 Bilibili 提供官方支持。
+    </div>
+
+</body>
+</html>
