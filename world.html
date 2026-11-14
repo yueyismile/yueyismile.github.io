@@ -73,7 +73,6 @@
         @keyframes fall { 0% { top: -10vh; opacity: 0; transform: scale(0.8); } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 110vh; opacity: 0; transform: scale(1.2); } }
         @keyframes sway { 0% { transform: translateX(-20px) rotate(0deg); } 100% { transform: translateX(20px) rotate(360deg); } }
 
-        /* 夸张版爆炸特效 */
         @keyframes bigBloodBurst { 0% { width: 10px; height: 10px; opacity: 1; border: 3px solid #ff0000; box-shadow: 0 0 20px #ff0000; } 100% { width: 250px; height: 250px; opacity: 0; border: 1px solid #8b0000; box-shadow: 0 0 50px #8b0000; } }
 
         #music-btn, #back-to-top { position: fixed; right: 40px; width: 50px; height: 50px; border-radius: 50%; background: rgba(8, 8, 10, 0.9); border: 1px solid #c9a063; color: #c9a063; font-size: 1.2rem; cursor: pointer; z-index: 9999; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; }
@@ -260,5 +259,38 @@
             setTimeout(() => { trail.remove(); }, 1200);
         });
     </script>
+
+    <!-- 🧭 绝对防弹版侧边导航（已移出 script 标签，保证正常显示） -->
+    <div id="moon-side-nav" style="position: fixed !important; right: 20px !important; top: 50% !important; transform: translateY(-50%) !important; background: rgba(8, 8, 10, 0.95) !important; border: 1px solid rgba(201, 160, 99, 0.4) !important; border-radius: 8px !important; padding: 15px 12px !important; display: flex !important; flex-direction: column !important; gap: 25px !important; z-index: 99999 !important; box-shadow: 0 0 20px rgba(0, 0, 0, 0.8) !important;">
+        
+        <a href="index.html" style="color: #c9a063 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important;" title="暗夜圣殿 (主页)">
+            <i class="fas fa-cross"></i>
+        </a>
+        
+        <a href="oc.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="OC 档案馆">
+            <i class="fas fa-book-skull"></i>
+        </a>
+        
+        <a href="world.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="世界观档案">
+            <i class="fas fa-globe"></i>
+        </a>
+        
+        <a href="timeline.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="暗夜编年史">
+            <i class="fas fa-hourglass-half"></i>
+        </a>
+        
+        <a href="game.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="RPG 游戏">
+            <i class="fas fa-gamepad"></i>
+        </a>
+        
+        <a href="renpy.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="视觉小说">
+            <i class="fas fa-book-open"></i>
+        </a>
+        
+        <a href="videos.html" style="color: #8a8a93 !important; font-size: 1.3rem !important; text-decoration: none !important; text-align: center !important; transition: all 0.3s !important;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='#8a8a93'" title="影像圣殿">
+            <i class="fab fa-bilibili"></i>
+        </a>
+    </div>
+
 </body>
 </html>
