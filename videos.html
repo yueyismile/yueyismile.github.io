@@ -30,7 +30,7 @@
             gap: 30px; max-width: 1400px; margin: 0 auto 60px; padding: 0 5%;
         }
 
-        /* 视频卡片 */
+        /* 官方播放器卡片 */
         .video-card-wrapper {
             background: #000; border: 1px solid #333; padding: 10px;
             transition: all 0.4s ease; display: flex; flex-direction: column;
@@ -40,25 +40,10 @@
             border-color: var(--accent-blue); box-shadow: 0 0 30px rgba(0, 161, 214, 0.3); transform: translateY(-5px);
         }
 
-        /* 封面占位区 */
-        .video-cover-box { 
-            width: 100%; height: 280px; position: relative; overflow: hidden; cursor: pointer; border-radius: 4px;
-            background: #111; display: flex; justify-content: center; align-items: center;
+        /* 真实的 B 站播放器 */
+        .video-card-wrapper iframe {
+            width: 100%; height: 280px; border: none; border-radius: 4px; display: block; background: #000;
         }
-        .video-cover { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(30%); transition: all 0.4s; }
-        .video-card-wrapper:hover .video-cover { filter: grayscale(0%); transform: scale(1.05); }
-        
-        /* 播放按钮遮罩 */
-        .play-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center;
-            transition: all 0.3s;
-        }
-        .video-card-wrapper:hover .play-overlay { background: rgba(0, 161, 214, 0.2); }
-        .play-overlay i {
-            font-size: 4rem; color: rgba(255,255,255,0.8); transition: all 0.3s; text-shadow: 0 0 20px #000;
-        }
-        .video-card-wrapper:hover .play-overlay i { color: #fff; transform: scale(1.1); }
 
         /* 视频下方的借物表按钮 */
         .credit-details {
@@ -89,7 +74,7 @@
 
         @media (max-width: 768px) {
             .video-grid { grid-template-columns: 1fr; }
-            .video-cover-box { height: 220px; }
+            .video-card-wrapper iframe { height: 220px; }
         }
     </style>
 </head>
@@ -101,105 +86,80 @@
     </div>
 
     <h1 class="page-title">视 频 作 品</h1>
-    <p class="page-subtitle">✟ 点击封面，原地直接播放 ✟</p>
+    <p class="page-subtitle">✟ 点击播放键即可带声音观看 ✟</p>
 
-    <!-- 视频展示区 -->
     <div class="video-grid">
         
         <!-- 视频 1 -->
         <div class="video-card-wrapper">
-            <!-- 魔法在这里：把封面和 BV 号绑定，点击它才会加载播放器 -->
-            <div class="video-cover-box" data-bvid="BV1MHps6yEy3" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1MHps6yEy3.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <!-- 加了 autoplay=0 保证安全不黑屏，点击播放键必定有声 -->
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1MHps6yEy3&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">原曲：XXXXX<br>动作/参考：XXXXX</div>
+                <div class="credit-content">【20岁生贺手书/全曲描改】我和oc的超级超级超级超级讨厌<br>本视频描改自原曲：ダイダイダイダイダイキライ-初音ミク VS 重音テト</div>
             </details>
         </div>
 
         <!-- 视频 2 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1gntA6eEiH" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1gntA6eEiH.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1gntA6eEiH&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">模型：VRoid Studio 自制<br>场景：XXXXX</div>
+                <div class="credit-content">手残党自学建模给oc做了3D动画<br>音乐由[乌鸦Producer]提供<br>使用的HDRI贴图：Kloppenheim 02 作者：Greg Zaal（Poly Haven）<br>背景城市制作参考自：BV1rR4y1q7xa（BV号）<br>城市群贴图：使用了字节跳动Seed团队开发的Seedream 4.0模型来生成城市纹理贴图。</div>
             </details>
         </div>
 
         <!-- 视频 3 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1Ldbp6NEiu" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1Ldbp6NEiu.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1Ldbp6NEiu&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">动画制作：XXXXX</div>
+                <div class="credit-content">意义不明的oc变身小动画(=ﾟДﾟ=)<br>音乐由[乌鸦Producer]提供</div>
             </details>
         </div>
 
         <!-- 视频 4 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1cGxh6dEzJ" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1cGxh6dEzJ.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1cGxh6dEzJ&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">软件：Blender / VRoid Studio</div>
+                <div class="credit-content">自制莫妮卡3D模型(≧∇≦)/<br>BGM：Ai đưa em về (Cukak Remix)</div>
             </details>
         </div>
 
         <!-- 视频 5 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1288B6wEds" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1288B6wEds.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1288B6wEds&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">动作：XXXXX<br>镜头：XXXXX</div>
+                <div class="credit-content">【OC/MMD】Monster<br>椅子模型：まきがね<br>人物模型：我用vroid瞎捏的自家oc模型<br>动作/镜头：Spade_冬菇<br>场景：QQ炫舞手游/伍鹅<br>BGM：Monster</div>
             </details>
         </div>
 
         <!-- 视频 6 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1Td7k62EK5" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1Td7k62EK5.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1Td7k62EK5&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">BGM：XXXXX</div>
+                <div class="credit-content">依旧放飞自我画oc<br>BGM：红心皇后</div>
             </details>
         </div>
 
         <!-- 视频 7 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1yDr1BgENr" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1yDr1BgENr.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1yDr1BgENr&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">原曲：XXXXX</div>
+                <div class="credit-content">【DDLC/莫妮卡描改手书】急性恋爱中毒<br>描改自本家：BV1QCXgBEEid（BV号）<br>背景和字幕素材来源：BV162XYYNEuM</div>
             </details>
         </div>
 
         <!-- 视频 8 -->
         <div class="video-card-wrapper">
-            <div class="video-cover-box" data-bvid="BV1vV4k6mExf" onclick="playVideo(this)">
-                <img src="https://i0.hdslb.com/bfs/archive/BV1vV4k6mExf.jpg" class="video-cover" referrerpolicy="no-referrer">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
+            <iframe src="//player.bilibili.com/player.html?bvid=BV1vV4k6mExf&page=1&autoplay=0&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
             <details class="credit-details">
                 <summary>✟ 展开查看 视频借物表 ✟</summary>
-                <div class="credit-content">动作：XXXXX<br>模型：月翼smile 自制</div>
+                <div class="credit-content">【OC/MMD】Conqueror<br>模型：我用VRoid Studio瞎捏的自家oc<br>动作：<br>Choreography : YURI (RSC MASAMI STUDIO)<br>Motion Capture Studio : D1<br>MMD Motion : Suzuki Rin<br>Copyright : 1st PLACE Co., Ltd.<br>https://youtu.be/C3E5fb39xcs<br>https://www.nicovideo.jp/watch/so34711771<br>镜头：桂花糕配西米露<br>BGM：<br>Vocal : IA<br>Word : Clementine Jane<br>Music & Arrangement : Sendra<br>场景：我随便整的</div>
             </details>
         </div>
 
@@ -218,18 +178,5 @@
         </div>
     </div>
 
-    <script>
-        // 核心代码：当点击封面时，生成 B 站播放器并替换封面
-        function playVideo(element) {
-            const bvid = element.getAttribute('data-bvid');
-            // autoplay=1 表示点击后自动开始播放
-            const iframeHtml = `<iframe src="//player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width:100%; height:100%; border-radius:4px;"></iframe>`;
-            
-            element.innerHTML = iframeHtml;
-            // 移除点击事件，防止重复点击
-            element.onclick = null; 
-            element.style.cursor = 'default';
-        }
-    </script>
 </body>
 </html>
