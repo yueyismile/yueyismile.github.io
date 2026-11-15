@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物关系星图 | 暗夜圣殿</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 🌟 引入 Vis.js 图谱引擎 -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+    <style>
+        :root { --bg-dark: #030304; --text-main: #e8e8eb; --text-muted: #8a8a93; --accent-gold: #c9a063; --accent-blood: #cc0000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-dark); color: var(--text-main);
+            font-family: 'Noto Serif SC', serif; overflow: hidden; cursor: crosshair;
+            background-image: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.15), transparent 70%);
+            height: 100vh;
+        }
+        .page-border { position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999; }
+        
+        /* 顶部导航 */
+        .nav-bar { display: flex; justify-content: center; padding: 30px 0; position: absolute; top: 0; width: 100%; z-index: 10; pointer-events: none; }
+        .back-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; letter-spacing: 2px; transition: all 0.3s; pointer-events: auto; }
+        .back-btn:hover { color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
+        
+        /* 星图容器 */
+        #network-container {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        /* 左上角标题 */
+        .page-title-box {
+            position: absolute; top: 80px; left: 40px; z-index: 10; pointer-events: none;
+        }
+        .page-title { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--accent-gold); letter-spacing: 5px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(201,160,99,0.5); }
+        .page-subtitle { color: var(--text-muted); letter-spacing: 3px; font-size: 0.9rem; }
+
+        /* 右下角操作提示 */
+        .hint-box {
+            position: absolute; bottom: 40px; right: 40px; z-index: 10; pointer-events: none;
+            color: #555; font-size: 0.85rem; text-align: right; line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-border"></div>
+    <div id="network-container"></div>
+
+    <div class="nav-bar">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回暗夜圣殿</a>
+    </div>
+
+    <div class="page-title-box">
+        <h1 class="page-title">命运星图</h1>
+        <p class="page-subtitle">✟ 人物羁绊关系网 ✟</p>
+    </div>
+
+    <div class="hint-box">
+        <i class="fas fa-mouse"></i> 拖拽/滚轮缩放<br>
+        <i class="fas fa-hand-pointer"></i> 点击节点可查看羁绊
+    </div>
+
+    <script>
+        // ==========================================
+        // 👇 这里是你的人物数据库 👇
+        // 修改 label 里的名字，color 可以改星星的颜色
+        // ==========================================
+        const nodes = new vis.DataSet([
+            { id: 1, label: "斯迈尔", color: { background: "#8b0000", border: "#c9a063" }, size: 30, font: { color: "#fff", face: "Noto Serif SC" } },
+            { id: 2, label: "019 (邪神残骸)", color: { background: "#4a148c", border: "#c9a063" }, size: 30, font: { color: "#fff", face: "Noto Serif SC" } },
+            { id: 3, label: "022 (阴暗面)", color: { background: "#2c3e50", border: "#c9a063" }, size: 25, font: { color: "#fff", face: "Noto Serif SC" } },
+            { id: 4, label: "Requiem 公司", color: { background: "#000", border: "#c9a063" }, size: 40, shape: "diamond", font: { color: "#c9a063", face: "Noto Serif SC" } },
+            { id: 5, label: "影子", color: { background: "#111", border: "#555" }, size: 20, font: { color: "#aaa", face: "Noto Serif SC" } }
+        ]);
+
+        // ==========================================
+        // 👇 这里是他们的羁绊连线 👇
+        // from 和 to 填入上面人物的 id
+        // label 写关系（比如：监管、执念、敌人）
+        // ==========================================
+        const edges = new vis.DataSet([
+            { from: 1, to: 4, label: "所属/处刑人", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
+            { from: 1, to: 2, label: "监管者", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
+            { from: 3, to: 2, label: "病态执念", font: { color: "#cc0000", size: 12, strokeWidth: 0 }, color: { color: "#cc0000" }, dashes: true },
+            { from: 4, to: 2, label: "研究/囚禁", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#4a148c" }, arrows: "to" },
+            { from: 5, to: 4, label: "潜伏/未知", font: { color: "#aaa", size: 12, strokeWidth: 0 }, color: { color: "#555" }, dashes: true },
+            { from: 5, to: 1, label: "短暂接触", font: { color: "#aaa", size: 12, strokeWidth: 0 }, color: { color: "#555" }, dashes: true }
+        ]);
+
+        const container = document.getElementById('network-container');
+        const data = { nodes: nodes, edges: edges };
+
+        // 配置星图的物理引擎和视觉样式
+        const options = {
+            nodes: {
+                borderWidth: 2,
+                shadow: true, // 发光阴影
+            },
+            edges: {
+                width: 1.5,
+                smooth: {
+                    type: 'continuous' // 曲线连线
+                },
+                shadow: true
+            },
+            physics: {
+                barnesHut: {
+                    gravitationalConstant: -2000,
+                    centralGravity: 0.3,
+                    springLength: 150,
+                    springConstant: 0.04,
+                },
+                stabilization: { iterations: 150 }
+            },
+            interaction: {
+                hover: true, // 鼠标悬停高亮
+                tooltipDelay: 200
+            }
+        };
+
+        // 启动星图
+        const network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
