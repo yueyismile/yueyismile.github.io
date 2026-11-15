@@ -950,5 +950,23 @@
 </div>
 <!-- 👑 专属 Live2D 看板娘 -->
 <script src="https://cdn.jsdelivr.net/npm/oh-my-live2d@0.1.9/dist/index.min.js"></script>
+<!-- Live2D 测试代码 -->
+<script src="https://cdn.jsdelivr.net/npm/oh-my-live2d@latest/dist/index.min.js"></script>
+<script>
+  OML2D.loadOml2d({
+    models: [
+      {
+        // 这是一个网上的公开测试模型，看它能不能出来
+        path: "https://cdn.jsdelivr.net/gh/oh-my-live2d/live2d-model@main/shizuku/shizuku.model3.json",
+        scale: 0.15,
+        position: [0, 60],
+        stageLayout: "left"
+      }
+    ],
+    mobile: {
+      show: false
+    }
+  });
+</script>
 </body>
 </html>
