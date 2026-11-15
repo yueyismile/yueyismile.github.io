@@ -948,33 +948,44 @@
     <a href="renpy.html" title="视觉小说"><i class="fas fa-book-open"></i></a>
     <a href="videos.html" title="视频作品展示"><i class="fab fa-bilibili"></i></a>
 </div>
-<!-- 加载本地的工具，秒开！ -->
-<script src="./l2d.js"></script>
-<script>
-  window.addEventListener('load', () => {
-    if (window.L2D_WIDGET) {
-      L2D_WIDGET.createWidget({
-        // 模型还是用你的加速链接
-        model: { path: "https://yueyismile.github.io/live2d/2.model3.json" },
-        mobile: { show: false }
-      });
-    }
-  });
-</script>
-<script src="https://giscus.app/client.js"
-        data-repo="yueyismile/yueyismile.github.io"
-        data-repo-id="R_kgDOVobz2w"
-        data-category="Comments"
-        data-category-id="DIC_kwDOVobz284DLMd3"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
-</script>
+    <!-- ================= Live2D 看板娘终极稳定版 ================= -->
+    <script>
+      // 动态加载 oh-my-live2d，避免网络阻塞
+      var l2dScript = document.createElement('script');
+      l2dScript.src = 'https://cdn.jsdelivr.net/npm/oh-my-live2d@0.19.3/dist/index.min.js';
+      l2dScript.onload = function() {
+          OML2D.loadOml2d({
+              models: [
+                  {
+                      path: 'https://yueyismile.github.io/live2d/2.model3.json',
+                      scale: 0.15,
+                      position: [0, 60],
+                      stageLayout: 'left'
+                  }
+              ],
+              mobile: { show: false }
+          });
+      };
+      document.head.appendChild(l2dScript);
+    </script>
+
+    <!-- ================= 哥特留言板 (强制暗黑防弹版) ================= -->
+    <div class="giscus" style="max-width: 1000px; margin: 40px auto; padding: 0 20px; position: relative; z-index: 9999;"></div>
+    <script src="https://giscus.app/client.js"
+            data-repo="yueyismile/yueyismile.github.io"
+            data-repo-id="R_kgDOVobz2w"
+            data-category="Comments"
+            data-category-id="DIC_kwDOVobz284DLMd3"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="dark_dimmed"
+            data-lang="zh-CN"
+            crossorigin="anonymous"
+            async>
+    </script>
+
 </body>
 </html>
