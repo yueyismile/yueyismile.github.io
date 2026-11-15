@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人物关系星图 | 暗夜圣殿</title>
+    <title>人物关系星图</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -55,17 +55,17 @@
     <div id="network-container"></div>
 
     <div class="nav-bar">
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回暗夜圣殿</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</a>
     </div>
 
     <div class="page-title-box">
-        <h1 class="page-title">命运星图</h1>
-        <p class="page-subtitle">✟ 人物羁绊关系网 ✟</p>
+        <h1 class="page-title">人物关系档案</h1>
+        <p class="page-subtitle">✟ 人物关系网 ✟</p>
     </div>
 
     <div class="hint-box">
         <i class="fas fa-mouse"></i> 拖拽/滚轮缩放<br>
-        <i class="fas fa-hand-pointer"></i> 点击节点可查看羁绊
+        <i class="fas fa-hand-pointer"></i> 点击节点可查看关系
     </div>
 
     <script>
@@ -78,7 +78,7 @@
             { id: 2, label: "019 (邪神残骸)", color: { background: "#4a148c", border: "#c9a063" }, size: 30, font: { color: "#fff", face: "Noto Serif SC" } },
             { id: 3, label: "022 (阴暗面)", color: { background: "#2c3e50", border: "#c9a063" }, size: 25, font: { color: "#fff", face: "Noto Serif SC" } },
             { id: 4, label: "Requiem 公司", color: { background: "#000", border: "#c9a063" }, size: 40, shape: "diamond", font: { color: "#c9a063", face: "Noto Serif SC" } },
-            { id: 5, label: "影子", color: { background: "#111", border: "#555" }, size: 20, font: { color: "#aaa", face: "Noto Serif SC" } }
+            { id: 5, label: "塞米尔", color: { background: "#111", border: "#555" }, size: 20, font: { color: "#aaa", face: "Noto Serif SC" } }
         ]);
 
         // ==========================================
@@ -87,7 +87,7 @@
         // label 写关系（比如：监管、执念、敌人）
         // ==========================================
         const edges = new vis.DataSet([
-            { from: 1, to: 4, label: "所属/处刑人", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
+            { from: 1, to: 4, label: "所属职员", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
             { from: 1, to: 2, label: "监管者", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
             { from: 3, to: 2, label: "病态执念", font: { color: "#cc0000", size: 12, strokeWidth: 0 }, color: { color: "#cc0000" }, dashes: true },
             { from: 4, to: 2, label: "研究/囚禁", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#4a148c" }, arrows: "to" },
