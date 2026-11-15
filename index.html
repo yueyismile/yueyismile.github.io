@@ -948,12 +948,13 @@
     <a href="renpy.html" title="视觉小说"><i class="fas fa-book-open"></i></a>
     <a href="videos.html" title="视频作品展示"><i class="fab fa-bilibili"></i></a>
 </div>
-<!-- 换用更稳的 jsDelivr 节点加载插件 -->
-<script src="https://cdn.jsdelivr.net/npm/l2d-widget@latest/dist/index.min.js"></script>
+<!-- 加载本地的工具，秒开！ -->
+<script src="./l2d.js"></script>
 <script>
   window.addEventListener('load', () => {
     if (window.L2D_WIDGET) {
       L2D_WIDGET.createWidget({
+        // 模型还是用你的加速链接
         model: { path: "https://cdn.jsdelivr.net/gh/yueyismile/yueyismile.github.io@main/live2d/2.model3.json" },
         mobile: { show: false }
       });
