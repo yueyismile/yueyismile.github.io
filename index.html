@@ -85,9 +85,8 @@
 
         /* === 3. 纯红玫瑰风暴 === */
         .petals-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50; overflow: hidden; }
-        .petal { position: absolute; top: 0; opacity: 0; animation: fall linear infinite; }
-        .petal-inner { display: block; width: 100%; height: 100%; border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; box-shadow: 0 0 15px rgba(204, 0, 0, 0.4); animation: sway ease-in-out infinite alternate; }
-        @keyframes fall { 0% { transform: translate3d(0, -10vh, 0); opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { transform: translate3d(0, 110vh, 0); opacity: 0; } }
+        .petal { position: absolute; border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%; opacity: 0; box-shadow: 0 0 15px rgba(204, 0, 0, 0.4); animation: fall linear infinite, sway ease-in-out infinite alternate; }
+        @keyframes fall { 0% { top: -10vh; opacity: 0; transform: scale(0.8); } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { top: 110vh; opacity: 0; transform: scale(1.2); } }
         @keyframes sway { 0% { transform: translateX(-20px) rotate(0deg); } 100% { transform: translateX(20px) rotate(360deg); } }
 
         /* === 4. 夸张版点击爆炸特效 === */
@@ -1117,23 +1116,18 @@
             'radial-gradient(circle at 30% 30%, #8b0000, #2a0000)', 'radial-gradient(circle at 30% 30%, #660000, #0a0000)'
         ];
         const petalCount = isMobile ? 30 : 150; // 手机30片，电脑150片
-        const petalFragment = document.createDocumentFragment();
         for (let i = 0; i < petalCount; i++) {
             const petal = document.createElement('div');
             petal.classList.add('petal');
-            const inner = document.createElement('span');
-            inner.className = 'petal-inner';
             const size = Math.random() * 18 + 5;
             petal.style.width = `${size}px`; petal.style.height = `${size}px`;
             petal.style.left = `${Math.random() * 100}vw`;
-            petal.style.animationDuration = `${Math.random() * 8 + 6}s`;
-            petal.style.animationDelay = `${Math.random() * 15}s`;
-            inner.style.background = redColors[Math.floor(Math.random() * redColors.length)];
-            inner.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
-            petal.appendChild(inner);
-            petalFragment.appendChild(petal);
+            petal.style.background = redColors[Math.floor(Math.random() * redColors.length)];
+            petal.style.animationDuration = `${Math.random() * 8 + 6}s, ${Math.random() * 2 + 1.5}s`;
+            petal.style.animationDelay = `${Math.random() * 15}s, 0s`;
+            petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+            petalsContainer.appendChild(petal);
         }
-        petalsContainer.appendChild(petalFragment);
 
         // 3. 首页打字机特效
         window.addEventListener('DOMContentLoaded', () => {
