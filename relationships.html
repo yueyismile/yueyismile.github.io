@@ -12,14 +12,33 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style>
-        :root { --bg-dark: #030304; --text-main: #e8e8eb; --text-muted: #8a8a93; --accent-gold: #c9a063; --accent-blood: #cc0000; }
+        :root { 
+            --bg-dark: #030304; --text-main: #e8e8eb; --text-muted: #8a8a93; 
+            --accent-gold: #c9a063; --accent-blood: #cc0000; --accent-purple: #6a1b9a; 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background-color: var(--bg-dark); color: var(--text-main);
             font-family: 'Noto Serif SC', serif; overflow: hidden; cursor: crosshair;
-            background-image: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.15), transparent 70%);
             height: 100vh;
         }
+
+        /* 🎇 哥特星空与魔法阵背景 */
+        .bg-magic-circle {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90vh; height: 90vh; border-radius: 50%;
+            border: 2px dashed rgba(139, 0, 0, 0.3);
+            background: repeating-conic-gradient(from 0deg, transparent 0deg 30deg, rgba(201, 160, 99, 0.05) 30deg 60deg);
+            animation: spinBg 60s linear infinite; z-index: 0; pointer-events: none;
+        }
+        .bg-magic-circle::before {
+            content: ''; position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%;
+            border-radius: 50%; border: 1px solid rgba(201, 160, 99, 0.15);
+            box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.2);
+        }
+        @keyframes spinBg { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
         .page-border { position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; border: 1px solid rgba(201, 160, 99, 0.15); pointer-events: none; z-index: 999; }
         
         /* 顶部导航 */
@@ -28,28 +47,34 @@
         .back-btn:hover { color: var(--accent-blood); text-shadow: 0 0 10px var(--accent-blood); }
         
         /* 星图容器 */
-        #network-container {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0; left: 0;
-        }
+        #network-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
 
         /* 左上角标题 */
-        .page-title-box {
-            position: absolute; top: 80px; left: 40px; z-index: 10; pointer-events: none;
+        .page-title-box { position: absolute; top: 80px; left: 40px; z-index: 10; pointer-events: none; }
+        .page-title { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--accent-gold); letter-spacing: 5px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(201,160,99,0.6); }
+        .page-subtitle { color: var(--accent-blood); letter-spacing: 3px; font-size: 0.9rem; text-shadow: 0 0 10px rgba(204,0,0,0.5); }
+
+        /* 📜 左下角图例终端 */
+        .legend-box {
+            position: absolute; bottom: 40px; left: 40px; z-index: 10; pointer-events: none;
+            background: rgba(8, 8, 10, 0.85); border: 1px solid #333; padding: 15px 20px;
+            border-left: 3px solid var(--accent-gold); box-shadow: 0 5px 15px rgba(0,0,0,0.8);
         }
-        .page-title { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--accent-gold); letter-spacing: 5px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(201,160,99,0.5); }
-        .page-subtitle { color: var(--text-muted); letter-spacing: 3px; font-size: 0.9rem; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.85rem; color: #aaa; }
+        .legend-item:last-child { margin-bottom: 0; }
+        .legend-color { width: 12px; height: 12px; border-radius: 50%; }
 
         /* 右下角操作提示 */
         .hint-box {
             position: absolute; bottom: 40px; right: 40px; z-index: 10; pointer-events: none;
-            color: #555; font-size: 0.85rem; text-align: right; line-height: 1.8;
+            color: #555; font-size: 0.85rem; text-align: right; line-height: 1.8; font-style: italic;
         }
     </style>
 </head>
 <body>
+
+    <!-- 背景魔法阵 -->
+    <div class="bg-magic-circle"></div>
 
     <div class="page-border"></div>
     <div id="network-container"></div>
@@ -59,75 +84,144 @@
     </div>
 
     <div class="page-title-box">
-        <h1 class="page-title">人物关系档案</h1>
-        <p class="page-subtitle">✟ 人物关系网 ✟</p>
+        <h1 class="page-title">人物关系星图</h1>
+        <p class="page-subtitle">✟ 牵绊轨迹 ✟</p>
     </div>
 
+    
+
     <div class="hint-box">
-        <i class="fas fa-mouse"></i> 拖拽/滚轮缩放<br>
-        <i class="fas fa-hand-pointer"></i> 点击节点可查看关系
+        <i class="fas fa-mouse"></i> 拖拽 / 滚轮缩放<br>
+        <i class="fas fa-hand-pointer"></i> 点击节点高关系线
     </div>
 
     <script>
         // ==========================================
-        // 👇 这里是你的人物数据库 👇
-        // 修改 label 里的名字，color 可以改星星的颜色
+        // 👇 节点数据 (带上了极其华丽的发光外圈)
         // ==========================================
         const nodes = new vis.DataSet([
-            { id: 1, label: "斯迈尔", color: { background: "#8b0000", border: "#c9a063" }, size: 30, font: { color: "#fff", face: "Noto Serif SC" } },
-            { id: 2, label: "019 (邪神残骸)", color: { background: "#4a148c", border: "#c9a063" }, size: 30, font: { color: "#fff", face: "Noto Serif SC" } },
-            { id: 3, label: "022 (阴暗面)", color: { background: "#2c3e50", border: "#c9a063" }, size: 25, font: { color: "#fff", face: "Noto Serif SC" } },
-            { id: 4, label: "Requiem 公司", color: { background: "#000", border: "#c9a063" }, size: 40, shape: "diamond", font: { color: "#c9a063", face: "Noto Serif SC" } },
-            { id: 5, label: "塞米尔", color: { background: "#111", border: "#555" }, size: 20, font: { color: "#aaa", face: "Noto Serif SC" } }
+            // 1. 绝对核心
+            { id: 1, label: "斯迈尔", x: 0, y: 0, shape: "dot", size: 45, color: { background: "#1a0000", border: "#cc0000" }, font: { color: "#c9a063", size: 20, face: "Cinzel", bold: true, strokeWidth: 4, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(204,0,0,0.9)", size: 40, x: 0, y: 0 } },
+            
+            // 2. 核心圈层
+            { id: 2, label: "019", x: -300, y: -180, shape: "dot", size: 35, color: { background: "#4a148c", border: "#c9a063" }, font: { color: "#fff", size: 18, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(74,20,140,0.8)", size: 20, x: 0, y: 0 } },
+            { id: 3, label: "022", x: 300, y: -180, shape: "dot", size: 35, color: { background: "#1a252f", border: "#c9a063" }, font: { color: "#fff", size: 18, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(44,62,80,0.8)", size: 20, x: 0, y: 0 } },
+            { id: 5, label: "塞米尔", x: -400, y: 120, shape: "dot", size: 30, color: { background: "#2b0000", border: "#8b0000" }, font: { color: "#fff", size: 16, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(139,0,0,0.6)", size: 15, x: 0, y: 0 } },
+            { id: 8, label: "卡罗拉", x: 400, y: 120, shape: "dot", size: 30, color: { background: "#2b0000", border: "#8b0000" }, font: { color: "#fff", size: 16, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(139,0,0,0.6)", size: 15, x: 0, y: 0 } },
+            
+            // 3. 外围角色
+            { id: 6, label: "001", x: -180, y: 320, shape: "dot", size: 28, color: { background: "#2b0000", border: "#8b0000" }, font: { color: "#fff", size: 15, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(139,0,0,0.5)", size: 15, x: 0, y: 0 } },
+            { id: 7, label: "玫瑰兔子", x: 180, y: 320, shape: "dot", size: 28, color: { background: "#2b0000", border: "#8b0000" }, font: { color: "#fff", size: 15, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(139,0,0,0.5)", size: 15, x: 0, y: 0 } },
+            { id: 9, label: "？？？", x: 0, y: 200, shape: "dot", size: 25, color: { background: "#000", border: "#cc0000" }, font: { color: "#cc0000", size: 15, strokeWidth: 3, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(204,0,0,0.6)", size: 15, x: 0, y: 0 } },
+            
+            // 4. 巨型势力节点 (使用多边形)
+            { id: 4, label: "Requiem 公司", x: 0, y: -400, shape: "diamond", size: 50, color: { background: "#08080a", border: "#c9a063" }, font: { color: "#c9a063", size: 18, face: "Cinzel", bold: true, strokeWidth: 4, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(201,160,99,0.6)", size: 30, x: 0, y: 0 } },
+            { id: 10, label: "厄喀德那教会", x: -550, y: -250, shape: "hexagon", size: 40, color: { background: "#08080a", border: "#cc0000" }, font: { color: "#cc0000", size: 16, bold: true, strokeWidth: 4, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(204,0,0,0.5)", size: 20, x: 0, y: 0 } },
+            { id: 11, label: "罗斯伍德学院", x: 550, y: -250, shape: "hexagon", size: 40, color: { background: "#08080a", border: "#00a1d6" }, font: { color: "#00a1d6", size: 16, bold: true, strokeWidth: 4, strokeColor: "#000" }, shadow: { enabled: true, color: "rgba(0,161,214,0.5)", size: 20, x: 0, y: 0 } }
         ]);
 
         // ==========================================
-        // 👇 这里是他们的羁绊连线 👇
-        // from 和 to 填入上面人物的 id
-        // label 写关系（比如：监管、执念、敌人）
+        // 👇 连线数据 (分色、发光、文字加黑底)
         // ==========================================
         const edges = new vis.DataSet([
-            { from: 1, to: 4, label: "所属职员", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
-            { from: 1, to: 2, label: "监管者", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#8b0000" }, arrows: "to" },
-            { from: 3, to: 2, label: "病态执念", font: { color: "#cc0000", size: 12, strokeWidth: 0 }, color: { color: "#cc0000" }, dashes: true },
-            { from: 4, to: 2, label: "研究/囚禁", font: { color: "#c9a063", size: 12, strokeWidth: 0 }, color: { color: "#4a148c" }, arrows: "to" },
-            { from: 5, to: 4, label: "潜伏/未知", font: { color: "#aaa", size: 12, strokeWidth: 0 }, color: { color: "#555" }, dashes: true },
-            { from: 5, to: 1, label: "短暂接触", font: { color: "#aaa", size: 12, strokeWidth: 0 }, color: { color: "#555" }, dashes: true }
+            // 【斯迈尔中心辐射 - 暗金色核心羁绊】
+            { from: 1, to: 2, label: "好友", arrows: "to, from", color: { color: "#c9a063", highlight: "#fff" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, width: 2 },
+            { from: 1, to: 3, label: "同事/玩具", arrows: "to", color: { color: "#c9a063" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 1, to: 4, label: "所属研究员", arrows: "to, from", color: { color: "#c9a063", highlight: "#fff" }, font: { color: "#c9a063", size: 14, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, width: 3 },
+            { from: 1, to: 5, label: "最满意的作品", arrows: "to", color: { color: "#c9a063" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 1, to: 6, label: "养母", arrows: "to, from", color: { color: "#c9a063" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 1, to: 7, label: "好奇/喜爱", arrows: "to, from", color: { color: "#c9a063" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 1, to: 8, label: "共犯/青梅", arrows: "to, from", color: { color: "#c9a063" }, font: { color: "#c9a063", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            
+            // 【019 核心线 - 幽紫】
+            { from: 2, to: 3, label: "棋子/病态执念", arrows: "to, from", color: { color: "#6a1b9a" }, font: { color: "#b388ff", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: [5, 5] },
+            { from: 2, to: 5, label: "同事/害怕", arrows: "to, from", color: { color: "#6a1b9a" }, font: { color: "#b388ff", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 2, to: 6, label: "同类/可怕", arrows: "to, from", color: { color: "#6a1b9a" }, font: { color: "#b388ff", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 2, to: 7, label: "实用/害怕", arrows: "to, from", color: { color: "#6a1b9a" }, font: { color: "#b388ff", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 2, to: 8, label: "有意思/同事", arrows: "to, from", color: { color: "#6a1b9a" }, font: { color: "#b388ff", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+
+            // 【仇恨与敌对 - 血红色虚线】
+            { from: 3, to: 10, label: "污秽之物", arrows: "to, from", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: [4, 4] },
+            { from: 4, to: 10, label: "互相厌恶", arrows: "to, from", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: true },
+            { from: 5, to: 10, label: "极度厌恶", arrows: "to, from", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 6, to: 10, label: "污秽之物", arrows: "to", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 8, to: 10, label: "憎恨/恐惧", arrows: "to, from", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 10, to: 1, label: "罪人/憎恨", arrows: "to", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 10, to: 2, label: "污秽之物", arrows: "to", color: { color: "#cc0000" }, font: { color: "#ff5252", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+
+            // 【所属与机构关系 - 暗淡金】
+            { from: 2, to: 4, label: "所属职员", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 3, to: 4, label: "所属职员", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 4, to: 5, label: "研究/雇用", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 4, to: 6, label: "研究/雇用", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 4, to: 7, label: "吉祥物？", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 4, to: 8, label: "研究/雇用", arrows: "to", color: { color: "#554422" }, font: { color: "#888", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            
+            // 【其他势力链接 - 蓝/金】
+            { from: 1, to: 11, label: "伪造学生", arrows: "to", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 2, to: 11, label: "伪造入学", arrows: "to", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 3, to: 11, label: "伪造入学", arrows: "to", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 7, to: 11, label: "伪造入学", arrows: "to", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 8, to: 11, label: "伪造入学", arrows: "to", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 4, to: 11, label: "合作", arrows: "to, from", color: { color: "#00a1d6" }, font: { color: "#00a1d6", size: 13, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: true },
+
+            // 【灰色虚线单箭头 - 单向的特殊情感】
+            { from: 5, to: 1, label: "依赖/爱慕", arrows: "to", color: { color: "#555" }, font: { color: "#aaa", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: [3, 3] },
+            { from: 3, to: 1, label: "怪人/警惕", arrows: "to", color: { color: "#555" }, font: { color: "#aaa", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: [3, 3] },
+            { from: 3, to: 8, label: "心理变态同事", arrows: "to", color: { color: "#555" }, font: { color: "#aaa", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" }, dashes: [3, 3] },
+            
+            // 【其它日常关系 - 细暗金线】
+            { from: 5, to: 7, label: "饲养员/喜欢", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 5, to: 8, label: "异常合得来", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 5, to: 6, label: "家人/害怕", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 6, to: 7, label: "喜爱/害怕", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 6, to: 8, label: "尊敬/嫌弃", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } },
+            { from: 3, to: 5, label: "同事/嫌弃", arrows: "to, from", color: { color: "#8b0000" }, font: { color: "#c9a063", size: 12, strokeWidth: 3, strokeColor: "#000", background: "rgba(0,0,0,0.7)" } }
         ]);
 
         const container = document.getElementById('network-container');
         const data = { nodes: nodes, edges: edges };
 
-        // 配置星图的物理引擎和视觉样式
+        // ==========================================
+        // 👇 物理引擎配置
+        // ==========================================
         const options = {
             nodes: {
-                borderWidth: 2,
-                shadow: true, // 发光阴影
+                borderWidth: 3,
+                borderWidthSelected: 5,
+                shapeProperties: { borderDashes: false },
+                font: { face: 'Noto Serif SC' }
             },
             edges: {
                 width: 1.5,
                 smooth: {
-                    type: 'continuous' // 曲线连线
+                    type: 'continuous',
+                    roundness: 0.5 // 让双向箭头弯成漂亮的弧线
                 },
-                shadow: true
+                selectionWidth: 2,
+                hoverWidth: 2
             },
             physics: {
-                barnesHut: {
-                    gravitationalConstant: -2000,
-                    centralGravity: 0.3,
-                    springLength: 150,
-                    springConstant: 0.04,
-                },
-                stabilization: { iterations: 150 }
+                enabled: false // 🚨 静止星座，不乱飞
             },
             interaction: {
-                hover: true, // 鼠标悬停高亮
-                tooltipDelay: 200
+                hover: true,
+                hoverConnectedEdges: true, // 鼠标放上去高亮相连的线
+                selectConnectedEdges: true, // 点击高亮所有关系
+                tooltipDelay: 200,
+                dragNodes: true, // 允许你微调位置
+                zoomView: true
             }
         };
 
-        // 启动星图
         const network = new vis.Network(container, data, options);
+        
+        // 自动缩放居中
+        network.once("afterDrawing", function() {
+            network.fit({
+                animation: { duration: 1500, easingFunction: "easeInOutQuint" }
+            });
+        });
     </script>
 </body>
 </html>

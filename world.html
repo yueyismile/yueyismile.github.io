@@ -126,7 +126,7 @@
     <h1 class="page-title">世 界 观 档 案</h1>
 
     <div class="world-desc reveal">
-        <p>这个星球于远古神明【厄喀德那·原初之神】的尸骸中诞生，人类在祂腐烂的血肉中发展出文明。在都市的地底深处，旧神的尸骸从未停止过腐烂和异变，可怕的怪物似蛆虫般不断滋生。从远古时代开始，人类就在竭力对抗这些于神尸上诞生的“蛆虫”。经过千年镇压和后世政府的刻意隐瞒，怪物急剧减少的同时大部分人类也渐渐忘却了它们的存在，但是怪物仍然在诞生，甚至愈发扭曲可怕，还渐渐开始拥有智慧。政府隐瞒相关信息的同时暗中扶持“Requiem” 公司，专门解决怪物镇压问题。然而，渐渐地开始有人类的精神被污染从而和怪物同化，旧神的躯体已死，可意志却不断地向这颗星球施加诅咒，似乎在述说着祂的痛苦和祂对寄身于祂尸体之上的人类的无尽恶意······</p>
+        <p>这个星球于远古神明【厄喀德那·原初之神】的尸骸中诞生，人类在祂腐烂的血肉中发展出文明。在都市的地底深处，旧神的尸骸从未停止过腐烂和异变，可怕的怪物似蛆虫般不断滋生。从远古时代开始，人类就在竭力对抗这些于神尸上诞生的“蛆虫”。经过千年镇压和后世政府的刻意隐瞒，怪物急剧减少的同时大部分人类也渐渐忘却了它们的存在，但是怪物仍然在诞生，甚至愈发扭曲可怕，还渐渐开始拥有智慧。政府隐瞒相关信息的同时暗中扶持“Requiem” 公司，专门解决怪物镇压问题。然而，渐渐地开始有人类的精神被污染从而和怪物同化，旧神的躯体已死，可意志却不断地向这颗星球施加诅咒，似乎在述说着祂的痛苦和祂对寄身于祂尸体之上的这个世界的无尽恶意······</p>
     </div>
 
     <h2 class="section-title reveal">关 键 词</h2>
@@ -138,13 +138,13 @@
             <span class="faction-tag">杀戮·实验</span>
         </div>
         <div class="faction-card reveal">
-            <i class="fas fa-graduation-cap faction-icon"></i>
+            <i class="fas fa-eye faction-icon"></i>
             <h3 class="faction-name">怪物</h3>
             <p class="faction-desc">从神尸中诞生的蛆虫，从古至今便存在着的可怕怪物，大多没有理智，嗜血狂躁，极具破坏性。</p>
             <span class="faction-tag">嗜血·无差别攻击</span>
         </div>
         <div class="faction-card reveal">
-            <i class="fas fa-graduation-cap faction-icon"></i>
+           <i class="fas fa-eye faction-icon"></i>
             <h3 class="faction-name">【厄喀德那·原初之神】</h3>
             <p class="faction-desc">高维神明，死因不明，这个星球从祂的尸体中诞生。从一开始，这个世界创世的神就已经不复存在了。</p>
             <span class="faction-tag">旧神·已死之神·原初之神</span>
@@ -162,7 +162,7 @@
             <span class="faction-tag">平凡·稳定</span>
         </div>
         <div class="faction-card reveal">
-            <i class="fas fa-graduation-cap faction-icon"></i>
+            <i class="fas fa-building faction-icon"></i>
             <h3 class="faction-name">厄喀德那教会</h3>
             <p class="faction-desc">【厄喀德那·原初之神】最虔诚的信徒组织，坚信神明虽然肉体上死亡，但是祂的灵魂依旧俯视着每一个生灵，会回应他们作为信徒的虔诚之心，认为怪物的存在是对神明对人类的审判和考验。</p>
             <span class="faction-tag">虔诚·狂热</span>
@@ -187,15 +187,22 @@
             <p class="relation-desc">可怕的怪物诞生于神明那不断异变扭曲的腐烂尸骸，也是神明痛苦和无尽恶意的象征，是神尸上诞生的蛆虫。</p>
             <div style="text-align: right; margin-top: 15px; color: var(--accent-crimson); font-size: 0.8rem; letter-spacing: 2px;"><i class="fas fa-unlock-alt"></i> 点击解密档案</div>
         </div>
+        
+        <div class="relation-card reveal" onclick="openRelation('rel4')" style="cursor: pointer;">
+            <h4 class="relation-title"><i class="fas fa-link"></i> “Requiem” 公司 和 罗斯伍德学院</h4>
+            <p class="relation-desc">罗斯伍德学院上层与“Requiem”公司存在合作关系，并且暗中做了一笔交易······</p>
+            <div style="text-align: right; margin-top: 15px; color: var(--accent-crimson); font-size: 0.8rem; letter-spacing: 2px;"><i class="fas fa-unlock-alt"></i> 点击解密档案</div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="relation-modal">
         <div class="modal-content">
             <div class="close-btn" onclick="closeRelation()"><i class="fas fa-times"></i></div>
-            <div class="modal-header"><h2 class="modal-name" id="rel-title">关系标题</h2><p class="modal-subtitle" id="rel-tag">档案等级：绝密</p></div>
+            <div class="modal-header"><h2 class="modal-name" id="rel-title">关系标题</h2><p class="modal-subtitle" id="rel-tag">重要档案</p></div>
             <div class="modal-body"><div class="modal-story" id="rel-story">详细内容在这里...</div></div>
         </div>
     </div>
+    
 
     <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
     <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
@@ -204,9 +211,10 @@
     <script>
         // 人物数据
         const relationData = {
-            "rel1": { title: "斯迈尔 & 019", tag: "关系代码：相互依存的怪物", story: "斯迈尔作为公司最强大的处刑人，负责看管实验体019。在最初，斯迈尔仅仅把019当成一个消遣的“乐子”，但随着时间的推移，两人在这暗无天日的公司深处，形成了一种极其扭曲的羁绊。<br><br>斯迈尔享受019那不可名状力量带来的安全感，而019则依赖着斯迈尔提供的“人类外壳”与庇护。她们是彼此在这个疯狂世界里唯一的锚点，哪怕这个锚点是由鲜血与谎言构成的。" },
-            "rel2": { title: "022 对 019 的执念", tag: "关系代码：极度危险的病态占有", story: "022是邪神阴暗面的化身，代表着疯狂、毁灭与深渊。祂对019（主人格/光明面）有着极其病态且强烈的占有欲。<br><br>祂渴望吞噬019，让自己成为唯一的存在；但同时又害怕019彻底消失，因为如果没有了光，阴暗面也就失去了存在的意义。这种自相矛盾的疯狂执念，让022成为了公司内部最不稳定的危险因素。" },
-            "rel3": { title: "“影子”与公司", tag: "关系代码：未知的变量", story: "档案中标记为“谁人的复制体”。祂游走在公司的边缘，拥有与邪神遗骸相似的力量，却没有明确的身份。<br><br>公司高层怀疑祂是某次失败实验的产物，亦或是某个已死之人的倒影。祂怀着不可告人的目的潜伏在罗斯伍德学院。" }
+            "rel1": { title: "“Requiem” 公司 和 厄喀德那教会", tag: "敌对·水火不容", story: "水火不容的两个组织。厄喀德那教会视“Requiem” 公司为最大的异端组织，强烈谴责“Requiem” 公司拿旧神尸骸和怪物进行人体实验的行为，认为他们在亵渎神明。而公司则认为教会是一群走火入魔的疯子，与当初触碰禁忌制造出邪神的邪教文明无异。" },
+            "rel2": { title: "【厄喀德那·原初之神】和 【阿刻娅·血肉圣母】", tag: "真与伪", story: "【阿刻娅·血肉圣母】是已死的【厄喀德那·原初之神】的一颗腐坏的眼球，是人类通过血祭和狂热而创造出来的禁忌存在，是【厄喀德那·原初之神】可笑的仿制品，被人们供奉为神明，又被抛弃。" },
+            "rel3": { title: "【厄喀德那·原初之神】和 可怕的食人怪物", tag: "恶意", story: "可怕的怪物诞生于神明那不断异变扭曲的腐烂尸骸，也是神明痛苦和无尽恶意的象征，是神尸上诞生的蛆虫。" },
+            "rel4": { title: "“Requiem” 公司 和 罗斯伍德学院", tag: "?", story: "罗斯伍德学院上层与“Requiem”公司存在合作关系，并且暗中做了一笔交易······" }
         };
         function openRelation(id) { const data = relationData[id]; if(!data) return; document.getElementById('rel-title').innerText = data.title; document.getElementById('rel-tag').innerText = data.tag; document.getElementById('rel-story').innerHTML = data.story; document.getElementById('relation-modal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeRelation() { document.getElementById('relation-modal').classList.remove('active'); document.body.style.overflow = 'auto'; }
