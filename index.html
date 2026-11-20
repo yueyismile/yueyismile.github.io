@@ -14,7 +14,7 @@
     <!-- 📇 社交分享高级卡片 -->
     <meta property="og:title" content="月翼smile的小站">
     <meta property="og:description" content="欢迎来到我的小站，这里存放着我的OC设定、故事与游戏。">
-    <meta property="og:image" content="https://i2.hdslb.com/bfs/new_dyn/5ff550a580cbea3223a598715c64c086449174100.png">
+    <meta property="og:image" content="https://i2.hdslb.com/bfs/new_dyn/db7692481c92a2b1dbd599fe88e614c3449174100.png@1052w_!web-dynamic.avif">
     <meta property="og:url" content="https://yueyismile.github.io">
     <meta property="og:type" content="website">
 
@@ -757,8 +757,9 @@
     </section>
 
     <!-- 音乐播放器 & 回顶 -->
-    <audio id="bgm" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <audio id="bgm" loop preload="metadata"><source src="bgm.mp3" type="audio/mpeg"></audio>
     <button id="music-btn" title="播放/暂停音乐"><i class="fas fa-music"></i></button>
+    <div id="music-toast" style="position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(10px);background:rgba(20,0,0,.92);border:1px solid #8b0000;color:#e8d9c5;font-size:13px;padding:10px 16px;border-radius:4px;z-index:99999;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;letter-spacing:1px;max-width:86vw;text-align:center;"></div>
     <button id="back-to-top" title="回到顶部"><i class="fas fa-chevron-up"></i></button>
         <!-- ================= 赛博 APP 扩展坞 (游戏级展示区) ================= -->
     <section style="padding: 80px 5% 40px; position: relative; z-index: 1; text-align: center; background: radial-gradient(circle at center, rgba(201,160,99,0.05), transparent 70%);">
@@ -1161,30 +1162,89 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
 
-        // 5. 音乐无缝续播
+        // 5. 音乐无缝续播（带加载/失败反馈，避免"点了没反应"）
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('music-btn');
-        const savedTime = sessionStorage.getItem('bgmTime');
-        if (savedTime) { bgm.currentTime = parseFloat(savedTime); }
-        // 原版每个 timeupdate（每秒 4 次）都同步写 sessionStorage，会卡音频解码/播放
-        setInterval(() => {
-            if (bgm && !bgm.paused) { try { sessionStorage.setItem('bgmTime', bgm.currentTime); } catch (err) {} }
-        }, 2000);
-        window.addEventListener('pagehide', () => {
-            try { sessionStorage.setItem('bgmTime', bgm.currentTime); } catch (err) {}
-        });
-        if (sessionStorage.getItem('bgmPlaying') === 'true') {
-            bgm.play().then(() => { musicBtn.classList.add('playing'); musicBtn.style.color = '#cc0000'; }).catch(() => {});
+        const musicToast = document.getElementById('music-toast');
+        let musicToastTimer = null;
+        let musicError = false;
+        const store = {
+            get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+            set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+        };
+        function showMusicToast(msg) {
+            if (!musicToast) return;
+            musicToast.textContent = msg;
+            musicToast.style.opacity = '1';
+            musicToast.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(musicToastTimer);
+            musicToastTimer = setTimeout(function () {
+                musicToast.style.opacity = '0';
+                musicToast.style.transform = 'translateX(-50%) translateY(10px)';
+            }, 4000);
         }
-        musicBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleMusic(); });
+        function setMusicState(state) {
+            musicBtn.classList.toggle('playing', state === 'playing');
+            musicBtn.style.color = state === 'playing' ? '#cc0000' : '#c9a063';
+            musicBtn.title = state === 'playing' ? '暂停音乐'
+                : state === 'loading' ? '音乐缓冲中…'
+                : state === 'error' ? '音乐加载失败，点击重试'
+                : '播放音乐';
+            if (state === 'error') showMusicToast('音乐加载失败：确认 bgm.mp3 与页面在同一目录，或检查网络');
+        }
+        // 元数据就绪后再恢复进度，避免 InvalidStateError 打断整个脚本块
+        bgm.addEventListener('loadedmetadata', function () {
+            const saved = parseFloat(store.get('bgmTime') || '0');
+            if (saved > 0 && saved < bgm.duration) { try { bgm.currentTime = saved; } catch (e) {} }
+        }, { once: true });
+        setInterval(function () {
+            if (!bgm.paused) store.set('bgmTime', bgm.currentTime);
+        }, 2000);
+        window.addEventListener('pagehide', function () { store.set('bgmTime', bgm.currentTime); });
+
+        let playWanted = store.get('bgmPlaying') === 'true';
+        bgm.addEventListener('playing', function () {
+            playWanted = true;
+            musicError = false;
+            store.set('bgmPlaying', 'true');
+            setMusicState('playing');
+        });
+        bgm.addEventListener('pause', function () { if (!bgm.ended) setMusicState('paused'); });
+        bgm.addEventListener('waiting', function () { if (!bgm.paused) setMusicState('loading'); });
+        bgm.addEventListener('stalled', function () { if (!bgm.paused) setMusicState('loading'); });
+        bgm.addEventListener('canplay', function () { if (!bgm.paused) setMusicState('playing'); });
+        bgm.addEventListener('error', function () { musicError = true; setMusicState('error'); });
+
+        function toggleMusic() {
+            if (musicError) { musicError = false; try { bgm.load(); } catch (e) {} }
+            if (bgm.paused) {
+                store.set('bgmPlaying', 'true');
+                setMusicState('loading');
+                const p = bgm.play();
+                if (p && p.catch) p.catch(function () { musicError = true; setMusicState('error'); });
+            } else {
+                bgm.pause();
+                store.set('bgmPlaying', 'false');
+                setMusicState('paused');
+            }
+        }
+        musicBtn.addEventListener('click', function (e) { e.stopPropagation(); toggleMusic(); });
+        // 原版行为：首次点击页面任意处就尝试播放
         let hasClicked = false;
-        document.addEventListener('click', function() {
+        document.addEventListener('click', function () {
             if (!hasClicked && bgm.paused) { hasClicked = true; toggleMusic(); }
         });
-        function toggleMusic() {
-            if (bgm.paused) { bgm.play(); sessionStorage.setItem('bgmPlaying', 'true'); musicBtn.classList.add('playing'); musicBtn.style.color = '#cc0000'; } 
-            else { bgm.pause(); sessionStorage.setItem('bgmPlaying', 'false'); musicBtn.classList.remove('playing'); musicBtn.style.color = '#c9a063'; }
+        // 浏览器要求用户手势才能出声：首次交互时补一次续播
+        function unlockMusic() {
+            document.removeEventListener('pointerdown', unlockMusic);
+            document.removeEventListener('keydown', unlockMusic);
+            if (playWanted && bgm.paused) {
+                const p = bgm.play();
+                if (p && p.catch) p.catch(function () {});
+            }
         }
+        document.addEventListener('pointerdown', unlockMusic);
+        document.addEventListener('keydown', unlockMusic);
 
         // 6. 时钟转场
         document.querySelectorAll('a').forEach(link => {
